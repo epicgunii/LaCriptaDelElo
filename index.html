@@ -240,6 +240,17 @@ function valorEloOrdenable(f) {
 }
 
 let filasGlobal = [];
+let versionDDragon = "14.19.1"; // valor de respaldo por si falla la petición
+
+async function obtenerUltimaVersion() {
+  try {
+    const res = await fetch("https://ddragon.leagueoflegends.com/api/versions.json");
+    const versiones = await res.json();
+    if (versiones && versiones[0]) versionDDragon = versiones[0];
+  } catch (e) {
+    // si falla, seguimos con el valor de respaldo
+  }
+}
 
 function pintarFilas(filas) {
   const contenido = document.getElementById('contenido');
@@ -250,7 +261,7 @@ function pintarFilas(filas) {
         const winrate = totalPartidas ? Math.round((f.victorias / totalPartidas) * 100) : null;
         return `
         <div class="fila-jugador">
-          ${f.iconoUrl ? `<img class="avatar" src="${f.iconoUrl}" alt="">` : `<div class="avatar-vacio">?</div>`}
+          ${f.iconoUrl ? `<img class="avatar" src="${f.iconoUrl}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'avatar-vacio',textContent:'?'}))">` : `<div class="avatar-vacio">?</div>`}
           <div class="info-jugador">
             <span class="nombre-jugador">${f.alias}</span>
             <div class="champ-rol">${f.campeonTop || 'Sin registros'} ${f.rolTop ? '· ' + f.rolTop : ''}</div>
@@ -302,6 +313,7 @@ async function cargar() {
   const { data: jugadores } = await sb.from('jugadores').select('*');
   const { data: partidas } = await sb.from('partidas').select('*');
   const { data: snapshots } = await sb.from('snapshots_elo').select('*').order('fecha', { ascending: true });
+  await obtenerUltimaVersion();
 
   clearInterval(ciclo);
   portal.style.display = 'none';
@@ -334,7 +346,7 @@ async function cargar() {
 
     return {
       alias: j.alias,
-      iconoUrl: j.icono_id ? `https://ddragon.leagueoflegends.com/cdn/14.19.1/img/profileicon/${j.icono_id}.png` : null,
+      iconoUrl: j.icono_id ? `https://ddragon.leagueoflegends.com/cdn/${versionDDragon}/img/profileicon/${j.icono_id}.png` : null,
       tier: ultimo ? ultimo.tier : null,
       division: ultimo ? ultimo.division : null,
       lp: ultimo ? ultimo.lp : null,
