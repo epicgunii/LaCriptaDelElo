@@ -18,6 +18,7 @@
     --text: #b8c2bb;
     --text-dim: #5b665f;
     --danger: #c9564a;
+    --fuego: #ff7a2e;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -56,21 +57,19 @@
     margin-top: 10px; font-family: 'Cinzel', serif; font-size: 0.85rem;
     letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim);
   }
-  .lema {
-    margin-top: 14px; font-style: italic; color: var(--text-dim); font-size: 0.9rem;
-  }
+  .lema { margin-top: 14px; font-style: italic; color: var(--text-dim); font-size: 0.9rem; }
   .rombo-divisor {
     width: 8px; height: 8px; background: var(--emerald); transform: rotate(45deg);
     margin: 26px auto 0; box-shadow: 0 0 10px rgba(52,224,161,0.5);
   }
 
   nav.pestanas {
-    display: flex; justify-content: center; gap: 10px; margin: 34px 0 26px;
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 10px; margin: 34px 0 26px;
     border-bottom: 1px solid var(--line);
   }
   nav.pestanas button {
-    font-family: 'Cinzel', serif; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
-    background: none; border: none; color: var(--text-dim); padding: 10px 6px 14px;
+    font-family: 'Cinzel', serif; font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase;
+    background: none; border: none; color: var(--text-dim); padding: 10px 4px 14px;
     cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px;
   }
   nav.pestanas button.activa { color: var(--emerald); border-bottom-color: var(--emerald); }
@@ -84,20 +83,16 @@
   .barra-estado .conectado { color: var(--emerald); display: flex; align-items: center; gap: 6px; }
   .barra-estado .punto {
     width: 6px; height: 6px; border-radius: 50%; background: var(--emerald);
-    box-shadow: 0 0 6px var(--emerald);
-    animation: parpadeo-punto 1.4s ease-in-out infinite;
+    box-shadow: 0 0 6px var(--emerald); animation: parpadeo-punto 1.4s ease-in-out infinite;
   }
-  @keyframes parpadeo-punto {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.25; }
-  }
+  @keyframes parpadeo-punto { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+  .barra-estado b { color: var(--text); }
   .boton-refrescar {
     font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
     background: var(--emerald-dim); color: #06110c; border: 1px solid var(--emerald);
     padding: 4px 14px; cursor: pointer; margin-left: 4px;
   }
   .boton-refrescar:hover { background: var(--emerald); }
-  .barra-estado b { color: var(--text); }
 
   .controles { display: flex; justify-content: flex-end; margin-bottom: 16px; }
   .controles select {
@@ -110,25 +105,70 @@
 
   .fila-jugador {
     display: grid;
-    grid-template-columns: auto 1fr auto auto;
+    grid-template-columns: auto auto 1fr auto auto;
     gap: 20px;
     align-items: center;
     background: var(--panel);
     border: 1px solid var(--line);
     border-left: 2px solid var(--emerald-dim);
     padding: 16px 20px;
+    position: relative;
+    overflow: hidden;
   }
   .fila-jugador:hover { border-left-color: var(--emerald); }
+  .fila-jugador > * { position: relative; z-index: 2; }
+
+  .puesto { font-family: 'Cinzel', serif; font-size: 0.95rem; color: var(--text-dim); min-width: 22px; text-align: center; }
+  .fila-jugador.puesto-1 { border-left-color: #d4af37; background: linear-gradient(90deg, rgba(212,175,55,0.07), var(--panel) 40%); }
+  .fila-jugador.puesto-2 { border-left-color: #b9c2c8; background: linear-gradient(90deg, rgba(185,194,200,0.06), var(--panel) 40%); }
+  .fila-jugador.puesto-3 { border-left-color: #b0703a; background: linear-gradient(90deg, rgba(176,112,58,0.06), var(--panel) 40%); }
+  .fila-jugador.puesto-1 .puesto { color: #d4af37; font-size: 1.1rem; }
+  .fila-jugador.puesto-2 .puesto { color: #b9c2c8; font-size: 1.05rem; }
+  .fila-jugador.puesto-3 .puesto { color: #b0703a; font-size: 1.05rem; }
+
+  /* Racha de fuego */
+  .fila-jugador.en-racha::before {
+    content: ''; position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(90deg, transparent, rgba(255,122,46,0.18), transparent 70%);
+    background-size: 180% 100%;
+    animation: fuego-mov 3.2s ease-in-out infinite;
+  }
+  @keyframes fuego-mov {
+    0%   { background-position: 0% 0; }
+    50%  { background-position: 100% 0; }
+    100% { background-position: 0% 0; }
+  }
+  .fila-jugador.en-racha { border-left-color: var(--fuego); }
+  .etiqueta-racha {
+    font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--fuego); border: 1px solid var(--fuego); padding: 1px 7px; margin-left: 8px;
+  }
+
+  /* Racha de derrotas: sombra pulsante, tono cementerio */
+  .fila-jugador.en-maldicion::before {
+    content: ''; position: absolute; inset: 0; z-index: 1;
+    background: radial-gradient(ellipse 80% 100% at 50% 50%, rgba(106,90,122,0.22), transparent 75%);
+    animation: sombra-pulso 3.4s ease-in-out infinite;
+  }
+  @keyframes sombra-pulso {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+  .fila-jugador.en-maldicion { border-left-color: #6a5a7a; }
+  .etiqueta-maldicion {
+    font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase;
+    color: #9a8ab0; border: 1px solid #6a5a7a; padding: 1px 7px; margin-left: 8px;
+  }
 
   .avatar { width: 52px; height: 52px; border-radius: 6px; border: 1px solid var(--line); }
   .avatar-vacio {
     width: 52px; height: 52px; border-radius: 6px; border: 1px solid var(--line);
     display: flex; align-items: center; justify-content: center; color: var(--text-dim); font-size: 0.7rem;
   }
+  .avatar-mini { width: 34px; height: 34px; border-radius: 5px; border: 1px solid var(--line); }
 
   .info-jugador { min-width: 0; }
   .nombre-jugador { font-family: 'Cinzel', serif; font-size: 1.05rem; color: var(--gold); }
-  .tag-jugador { color: var(--text-dim); font-size: 0.85rem; margin-left: 4px; }
   .champ-rol { color: var(--text-dim); font-size: 0.85rem; margin-top: 3px; font-style: italic; }
 
   .bloque-elo { text-align: center; min-width: 110px; }
@@ -141,42 +181,11 @@
   .lp-label { font-size: 0.65rem; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
 
   .bloque-winrate { min-width: 140px; }
-  .winrate-pct { color: var(--emerald); font-family: 'Cinzel', serif; font-size: 1rem; }
+  .winrate-pct { font-family: 'Cinzel', serif; font-size: 1rem; }
   .barra-winrate { width: 100%; height: 4px; background: var(--line); margin: 6px 0; overflow: hidden; }
   .barra-winrate-relleno { height: 100%; background: var(--emerald); }
   .barra-winrate-relleno.relleno-bajada { background: var(--danger); }
   .vd { font-size: 0.78rem; color: var(--text-dim); }
-
-  .grid-curiosos { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 30px; }
-  .tarjeta-curiosa { background: var(--panel); border: 1px solid var(--line); border-left: 2px solid var(--emerald-dim); padding: 22px 20px; }
-
-  .seccion-proximamente { position: relative; }
-  .seccion-proximamente .contenido-desenfocado {
-    filter: blur(6px);
-    pointer-events: none;
-    user-select: none;
-    opacity: 0.6;
-  }
-  .aviso-proximamente {
-    position: absolute; inset: 0;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 8px; z-index: 5;
-  }
-  .aviso-proximamente .etiqueta {
-    font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 0.18em; text-transform: uppercase;
-    color: var(--gold); background: rgba(11,15,13,0.85); border: 1px solid var(--gold-dead, var(--line));
-    padding: 10px 24px;
-  }
-  .aviso-proximamente .detalle {
-    font-style: italic; color: var(--text-dim); font-size: 0.82rem;
-    background: rgba(11,15,13,0.85); padding: 2px 10px;
-  }
-  .tarjeta-curiosa h3 {
-    font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--text-dim); margin-bottom: 12px;
-  }
-  .tarjeta-curiosa .nombre-destacado { font-family: 'Cinzel', serif; font-size: 1.2rem; color: var(--gold); }
-  .tarjeta-curiosa .valor-destacado { margin-top: 6px; font-size: 0.9rem; color: var(--text-dim); font-style: italic; }
   .subida { color: var(--emerald); }
   .bajada { color: var(--danger); }
 
@@ -184,15 +193,106 @@
     font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.14em;
     text-transform: uppercase; color: var(--emerald); margin: 40px 0 6px;
   }
-
-  .portal {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    min-height: 50vh; gap: 20px;
+  h2.seccion:first-child { margin-top: 0; }
+  .subseccion {
+    font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-dim); margin: 26px 0 12px;
   }
+
+  .estado-vacio { text-align: center; color: var(--text-dim); font-style: italic; padding: 30px 0; }
+
+  /* La Hermandad: tarjeta de dúo partida en dos */
+  .tarjeta-duo {
+    background: var(--panel); border: 1px solid var(--line); border-left: 2px solid var(--emerald-dim);
+    padding: 18px 20px; margin-bottom: 12px; position: relative;
+  }
+  .tarjeta-duo.puesto-1 { border-left-color: #d4af37; }
+  .tarjeta-duo.puesto-2 { border-left-color: #b9c2c8; }
+  .tarjeta-duo.puesto-3 { border-left-color: #b0703a; }
+  .duo-cabecera { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .duo-lp-neto { font-family: 'Cinzel', serif; font-size: 1.15rem; }
+  .duo-jugadores { display: flex; align-items: center; gap: 14px; }
+  .duo-mitad { display: flex; align-items: center; gap: 10px; flex: 1; }
+  .duo-separador { font-family: 'Cinzel', serif; color: var(--text-dim); font-size: 0.8rem; }
+  .duo-stats { display: flex; gap: 18px; margin-top: 12px; font-size: 0.82rem; color: var(--text-dim); }
+  .duo-stats b { color: var(--text); }
+  .duo-barra { width: 100%; height: 4px; background: var(--line); margin-top: 10px; overflow: hidden; }
+  .duo-barra-relleno { height: 100%; background: var(--emerald); }
+
+  /* ---- Temas por pestaña ---- */
+
+  /* El Olimpo: majestuoso, mármol y luz dorada */
+  #vista-olimpo::before {
+    content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background: radial-gradient(ellipse 70% 40% at 50% 0%, rgba(212,175,55,0.05), transparent 60%);
+  }
+  #vista-olimpo h2.seccion { color: var(--gold); }
+  #vista-olimpo .fila-jugador.puesto-1 { box-shadow: 0 0 22px rgba(212,175,55,0.12); }
+
+  /* El Cementerio: tétrico, niebla y grises apagados */
+  #vista-cementerio .fila-jugador { border-left-color: #4a4658; background: linear-gradient(90deg, rgba(74,70,88,0.08), var(--panel) 45%); }
+  #vista-cementerio .fila-jugador:hover { border-left-color: #7a7290; }
+  #vista-cementerio .lema { color: #8a84a0; }
+  #vista-cementerio::before {
+    content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background: radial-gradient(ellipse 80% 50% at 50% 30%, rgba(74,70,88,0.08), transparent 65%);
+  }
+  #vista-cementerio .avatar, #vista-cementerio .avatar-vacio { filter: grayscale(0.55) brightness(0.85); }
+
+  /* El Infierno: ascuas, rojo y naranja inquieto */
+  #vista-infierno .fila-jugador { border-left-color: var(--fuego); background: linear-gradient(90deg, rgba(255,122,46,0.06), var(--panel) 45%); position: relative; overflow: hidden; }
+  #vista-infierno .fila-jugador:hover { border-left-color: #ff9a5c; }
+  #vista-infierno .lema { color: var(--fuego); }
+  #vista-infierno::before {
+    content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background: radial-gradient(ellipse 80% 50% at 50% 100%, rgba(255,122,46,0.08), transparent 65%);
+  }
+  #vista-infierno .fila-jugador::after {
+    content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: linear-gradient(0deg, rgba(255,122,46,0.06), transparent 55%);
+    animation: brasas 3.4s ease-in-out infinite alternate;
+  }
+  @keyframes brasas { 0% { opacity: 0.4; } 100% { opacity: 1; } }
+
+  /* La Hermandad: cálido, fraternal, tarjetas grandes */
+  #vista-hermandad .lema { color: #d99a5c; }
+  #vista-hermandad::before {
+    content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background: radial-gradient(ellipse 70% 40% at 50% 0%, rgba(217,154,92,0.06), transparent 60%);
+  }
+  #vista-hermandad .tarjeta-duo { border-left-color: #a3703f; padding: 22px 26px; }
+  #vista-hermandad .tarjeta-duo:hover { border-left-color: #d99a5c; }
+
+  .duo-v2-fila { display: flex; align-items: center; gap: 16px; padding: 6px 0; }
+  .duo-v2-nombres { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+  .duo-v2-avatares { display: flex; }
+  .duo-v2-avatares img { border-radius: 5px; border: 2px solid var(--panel); }
+  .duo-v2-avatares img:not(:first-child) { margin-left: -14px; }
+  .duo-v2-nombres-texto { font-family: 'Cinzel', serif; font-size: 1rem; color: var(--gold); }
+  .duo-v2-datos { display: flex; align-items: center; gap: 26px; flex-shrink: 0; }
+  .duo-v2-dato { text-align: center; min-width: 58px; }
+  .duo-v2-dato .valor { font-family: 'Cinzel', serif; font-size: 1.1rem; }
+  .duo-v2-dato .etiqueta { font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); margin-top: 2px; }
+  .duo-v2-barra-wrap { margin-top: 14px; }
+  .duo-v2-barra { width: 100%; height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; display: flex; }
+  .duo-v2-barra .segmento-victorias { height: 100%; background: var(--emerald); }
+  .duo-v2-barra .segmento-derrotas { height: 100%; background: var(--danger); }
+
+  /* Bloque "sin clasificar" reutilizable */
+  .bloque-sin-clasificar { margin-top: 18px; }
+  .fila-sin-clasificar {
+    display: flex; align-items: center; gap: 16px;
+    background: rgba(255,255,255,0.015); border: 1px dashed var(--line);
+    padding: 12px 18px; margin-bottom: 8px; opacity: 0.7;
+  }
+  .fila-sin-clasificar .avatar-mini { flex-shrink: 0; }
+  .fila-sin-clasificar .nombre-jugador { font-size: 0.95rem; }
+  .fila-sin-clasificar .nota-clasificacion { margin-left: auto; font-style: italic; font-size: 0.78rem; color: var(--text-dim); text-align: right; }
+
+  .portal { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 40vh; gap: 20px; }
   .runa-carga {
     width: 40px; height: 40px; position: relative; transform: rotate(45deg);
-    border: 1px solid var(--emerald-dim);
-    animation: pulso-carga 1.6s ease-in-out infinite;
+    border: 1px solid var(--emerald-dim); animation: pulso-carga 1.6s ease-in-out infinite;
   }
   .runa-carga::before { content: ''; position: absolute; inset: 7px; border: 1px solid var(--emerald); }
   @keyframes pulso-carga {
@@ -200,12 +300,23 @@
     50% { box-shadow: 0 0 24px rgba(52,224,161,0.5); border-color: var(--emerald); }
   }
   .mensaje-carga { font-style: italic; color: var(--text-dim); font-size: 0.92rem; }
-  #contenido { opacity: 0; transition: opacity 0.7s ease; }
-  #contenido.visible { opacity: 1; }
+  #contenido, .vista-pestana { opacity: 0; transition: opacity 0.5s ease; }
+  #contenido.visible, .vista-pestana.visible { opacity: 1; }
+
+  .seccion-proximamente { position: relative; }
+  .seccion-proximamente .contenido-desenfocado { filter: blur(6px); pointer-events: none; user-select: none; opacity: 0.6; }
+  .aviso-proximamente { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; z-index: 5; }
+  .aviso-proximamente .etiqueta {
+    font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--gold); background: rgba(11,15,13,0.85); border: 1px solid var(--line); padding: 10px 24px;
+  }
+  .aviso-proximamente .detalle { font-style: italic; color: var(--text-dim); font-size: 0.82rem; background: rgba(11,15,13,0.85); padding: 2px 10px; }
 
   @media (max-width: 640px) {
-    .fila-jugador { grid-template-columns: auto 1fr; grid-template-rows: auto auto; }
-    .bloque-elo, .bloque-winrate { text-align: left; grid-column: 2; }
+    .fila-jugador { grid-template-columns: auto auto 1fr; grid-template-rows: auto auto; }
+    .bloque-elo, .bloque-winrate { text-align: left; grid-column: 3; }
+    .duo-jugadores { flex-direction: column; align-items: stretch; }
+    .duo-separador { text-align: center; }
   }
 </style>
 </head>
@@ -224,8 +335,11 @@
   </header>
 
   <nav class="pestanas">
-    <button class="activa" data-tab="seguimiento">Seguimiento</button>
-    <button data-tab="cronicas">Crónicas</button>
+    <button class="activa" data-tab="legado">Legado</button>
+    <button data-tab="olimpo">El Olimpo</button>
+    <button data-tab="cementerio">El Cementerio</button>
+    <button data-tab="infierno">El Infierno</button>
+    <button data-tab="hermandad">La Hermandad</button>
   </nav>
 
   <div class="barra-estado">
@@ -235,7 +349,12 @@
     <span>Vigilados: <b id="totalVigilados">0</b></span>
   </div>
 
-  <div id="vista-seguimiento">
+  <div class="portal" id="portal">
+    <div class="runa-carga"></div>
+    <p class="mensaje-carga" id="mensajeCarga">Descendiendo hacia los archivos de Riot…</p>
+  </div>
+
+  <div id="vista-legado" class="vista-pestana">
     <div class="controles">
       <select id="ordenSelect">
         <option value="elo-desc">Elo — de mayor a menor</option>
@@ -243,13 +362,27 @@
         <option value="nombre">Nombre (A-Z)</option>
       </select>
     </div>
+    <div id="contenido-legado"></div>
+  </div>
 
-    <div class="portal" id="portal">
-      <div class="runa-carga"></div>
-      <p class="mensaje-carga" id="mensajeCarga">Descendiendo hacia los archivos de Riot…</p>
-    </div>
+  <div id="vista-olimpo" class="vista-pestana" style="display:none">
+    <p class="lema" style="margin-bottom: 20px">Solo cuentan quienes han combatido esta semana</p>
+    <div id="tabla-olimpo"></div>
+  </div>
 
-    <div id="contenido"></div>
+  <div id="vista-cementerio" class="vista-pestana" style="display:none">
+    <p class="lema" style="margin-bottom: 20px">Ordenado por muertes de media cada partida, esta semana</p>
+    <div id="tabla-cementerio"></div>
+  </div>
+
+  <div id="vista-infierno" class="vista-pestana" style="display:none">
+    <p class="lema" style="margin-bottom: 20px">Ordenado por kills de media cada partida, esta semana</p>
+    <div id="tabla-infierno"></div>
+  </div>
+
+  <div id="vista-hermandad" class="vista-pestana" style="display:none">
+    <p class="lema" style="margin-bottom: 20px">Las parejas que más han ganado juntas esta semana</p>
+    <div id="tabla-hermandad"></div>
   </div>
 </main>
 
@@ -260,23 +393,45 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const RANGOS_ORDEN = ["IRON","BRONZE","SILVER","GOLD","PLATINUM","EMERALD","DIAMOND","MASTER","GRANDMASTER","CHALLENGER"];
-
-// Secciones aún no fiables al 100%: true = mostrar "Próximamente" con desenfoque.
-// Cuando arreglemos el cálculo, basta con poner esto a false.
-const SECCIONES_EN_CONSTRUCCION = {
-  cronicasSemana: true,
-};
 const DIVISION_VALOR = { "IV": 0, "III": 1, "II": 2, "I": 3 };
-
 const COLOR_RANGO = {
   IRON: "#8a7d6f", BRONZE: "#a3672f", SILVER: "#9aa5ab", GOLD: "#d4af37",
   PLATINUM: "#3fa8a0", EMERALD: "#2fbf71", DIAMOND: "#4aa8e0",
   MASTER: "#b158e0", GRANDMASTER: "#e04f4f", CHALLENGER: "#f2d675",
 };
+const NOMBRE_ROL = { TOP: "Top", JUNGLE: "Jungla", MIDDLE: "Mid", BOTTOM: "ADC", UTILITY: "Support" };
 
-const NOMBRE_ROL = {
-  TOP: "Top", JUNGLE: "Jungla", MIDDLE: "Mid", BOTTOM: "ADC", UTILITY: "Support",
-};
+const UNA_HORA_MS = 60 * 60 * 1000;
+const LP_MEDIO_VICTORIA = 17;
+const LP_MEDIO_DERROTA = -15;
+const RACHA_MINIMA_PARA_FUEGO = 3;
+const MINIMO_PARTIDAS_PARA_CLASIFICAR = 5;
+
+// Separa una lista en {clasificados, sinClasificar} según el mínimo de partidas jugadas esta semana
+function separarPorClasificacion(lista, campoPartidas = 'partidasSemana') {
+  const clasificados = lista.filter(f => f[campoPartidas].length >= MINIMO_PARTIDAS_PARA_CLASIFICAR);
+  const sinClasificar = lista.filter(f => f[campoPartidas].length < MINIMO_PARTIDAS_PARA_CLASIFICAR);
+  return { clasificados, sinClasificar };
+}
+
+function filaSinClasificarHtml(f, notaExtra) {
+  const faltan = MINIMO_PARTIDAS_PARA_CLASIFICAR - f.partidasSemana.length;
+  return `
+    <div class="fila-sin-clasificar">
+      ${f.iconoUrl ? `<img class="avatar-mini" src="${f.iconoUrl}" alt="">` : ''}
+      <span class="nombre-jugador">${f.alias}</span>
+      <span class="nota-clasificacion">${notaExtra ? notaExtra + ' · ' : ''}Necesita ${faltan} partida${faltan === 1 ? '' : 's'} más para clasificar</span>
+    </div>`;
+}
+
+function bloqueSinClasificarHtml(sinClasificar, notaFn) {
+  if (!sinClasificar.length) return '';
+  return `
+    <div class="bloque-sin-clasificar">
+      <p class="subseccion">Sin clasificar todavía</p>
+      ${sinClasificar.map(f => filaSinClasificarHtml(f, notaFn ? notaFn(f) : null)).join('')}
+    </div>`;
+}
 
 function modaDe(arr) {
   if (!arr.length) return null;
@@ -293,60 +448,82 @@ function valorEloOrdenable(f) {
   return base + div + (f.lp || 0);
 }
 
+function inicioDeSemanaLocal() {
+  const ahora = new Date();
+  const diaSemana = ahora.getDay();
+  const diasDesdeLunes = diaSemana === 0 ? 6 : diaSemana - 1;
+  const inicio = new Date(ahora);
+  inicio.setHours(0, 0, 0, 0);
+  inicio.setDate(inicio.getDate() - diasDesdeLunes);
+  return inicio.getTime();
+}
+
+// Racha activa: mira las partidas más recientes de un jugador (ya ordenadas por fecha) y cuenta cuántas seguidas del mismo resultado lleva
+function calcularRacha(partidasOrdenadasDesc) {
+  if (!partidasOrdenadasDesc.length) return { tipo: null, largo: 0 };
+  const tipo = partidasOrdenadasDesc[0].resultado;
+  let largo = 0;
+  for (const p of partidasOrdenadasDesc) {
+    if (p.resultado === tipo) largo++;
+    else break;
+  }
+  return { tipo, largo };
+}
+
 let filasGlobal = [];
-let versionDDragon = "14.19.1"; // valor de respaldo por si falla la petición
+let versionDDragon = "14.19.1";
 
 async function obtenerUltimaVersion() {
   try {
     const res = await fetch("https://ddragon.leagueoflegends.com/api/versions.json");
     const versiones = await res.json();
     if (versiones && versiones[0]) versionDDragon = versiones[0];
-  } catch (e) {
-    // si falla, seguimos con el valor de respaldo
-  }
+  } catch (e) { /* seguimos con el valor de respaldo */ }
 }
 
-function pintarFilas(filas) {
-  const contenido = document.getElementById('contenido');
-  contenido.innerHTML = `
-    <div class="lista-jugadores">
-      ${filas.map(f => {
-        const totalPartidas = (f.victorias || 0) + (f.derrotas || 0);
-        const winrate = totalPartidas ? Math.round((f.victorias / totalPartidas) * 100) : null;
-        return `
-        <div class="fila-jugador">
-          ${f.iconoUrl ? `<img class="avatar" src="${f.iconoUrl}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'avatar-vacio',textContent:'?'}))">` : `<div class="avatar-vacio">?</div>`}
-          <div class="info-jugador">
-            <span class="nombre-jugador">${f.alias}</span>
-            <div class="champ-rol">${f.campeonFavorito || 'Sin registros'} ${f.rolReciente ? '· ' + f.rolReciente + ' (reciente)' : ''}</div>
-          </div>
-          <div class="bloque-elo">
-            <div class="insignia-rango" style="--color-rango: ${COLOR_RANGO[f.tier] || ''}">${f.tier ? f.tier + ' ' + (f.division || '') : 'Sin clasificar'}</div>
-            <div class="lp-grande">${f.lp !== null ? f.lp : '—'}</div>
-            <div class="lp-label">LP</div>
-          </div>
-          <div class="bloque-winrate">
-            ${winrate !== null ? `
-              <div class="winrate-pct ${winrate >= 50 ? 'subida' : 'bajada'}">${winrate}%</div>
-              <div class="barra-winrate"><div class="barra-winrate-relleno ${winrate >= 50 ? '' : 'relleno-bajada'}" style="width:${winrate}%"></div></div>
-              <div class="vd">${f.victorias}V ${f.derrotas}D</div>
-            ` : `<div class="vd">Sin partidas registradas</div>`}
-          </div>
-        </div>
-      `}).join('')}
-    </div>
+function filaHtml(f, puesto, opciones = {}) {
+  const claseTop = puesto === 1 ? 'puesto-1' : puesto === 2 ? 'puesto-2' : puesto === 3 ? 'puesto-3' : '';
+  const claseRacha = opciones.enRacha ? 'en-racha' : opciones.enMaldicion ? 'en-maldicion' : '';
+  const totalPartidas = (f.victorias || 0) + (f.derrotas || 0);
+  const winrate = totalPartidas ? Math.round((f.victorias / totalPartidas) * 100) : null;
 
-    <h2 class="seccion">Crónicas de la semana</h2>
-    <div class="${SECCIONES_EN_CONSTRUCCION.cronicasSemana ? 'seccion-proximamente' : ''}">
-      ${SECCIONES_EN_CONSTRUCCION.cronicasSemana ? `
-        <div class="aviso-proximamente">
-          <span class="etiqueta">Próximamente</span>
-          <span class="detalle">Aún puliendo estos rituales</span>
-        </div>
-      ` : ''}
-      <div class="grid-curiosos ${SECCIONES_EN_CONSTRUCCION.cronicasSemana ? 'contenido-desenfocado' : ''}" id="curiosos"></div>
-    </div>
-  `;
+  const bloqueDerecho = opciones.valorPersonalizado
+    ? `<div class="bloque-elo"><div class="lp-grande ${opciones.colorValor || ''}">${opciones.valorPersonalizado}</div><div class="lp-label">${opciones.etiquetaValor || ''}</div></div>`
+    : `<div class="bloque-elo">
+        <div class="insignia-rango" style="--color-rango: ${COLOR_RANGO[f.tier] || ''}">${f.tier ? f.tier + ' ' + (f.division || '') : 'Sin clasificar'}</div>
+        <div class="lp-grande">${f.lp !== null && f.lp !== undefined ? f.lp : '—'}</div>
+        <div class="lp-label">LP</div>
+      </div>`;
+
+  const bloqueWinrate = opciones.ocultarWinrate ? '' : `
+      <div class="bloque-winrate">
+        ${winrate !== null ? `
+          <div class="winrate-pct ${winrate >= 50 ? 'subida' : 'bajada'}">${winrate}%</div>
+          <div class="barra-winrate"><div class="barra-winrate-relleno ${winrate >= 50 ? '' : 'relleno-bajada'}" style="width:${winrate}%"></div></div>
+          <div class="vd">${f.victorias}V ${f.derrotas}D</div>
+        ` : `<div class="vd">Sin partidas registradas</div>`}
+      </div>`;
+
+  return `
+    <div class="fila-jugador ${claseTop} ${claseRacha}">
+      <span class="puesto">${puesto}</span>
+      ${f.iconoUrl ? `<img class="avatar" src="${f.iconoUrl}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'avatar-vacio',textContent:'?'}))">` : `<div class="avatar-vacio">?</div>`}
+      <div class="info-jugador">
+        <span class="nombre-jugador">${f.alias}</span>${opciones.enRacha ? `<span class="etiqueta-racha">Racha x${opciones.largoRacha}</span>` : ''}${opciones.enMaldicion ? `<span class="etiqueta-maldicion">Maldición x${opciones.largoRacha}</span>` : ''}
+        <div class="champ-rol">${opciones.lineaSecundaria || ''}</div>
+      </div>
+      ${bloqueDerecho}
+      ${bloqueWinrate}
+    </div>`;
+}
+
+function pintarFilasLegado(filas) {
+  const contenido = document.getElementById('contenido-legado');
+  contenido.innerHTML = `<div class="lista-jugadores">${
+    filas.map((f, i) => filaHtml(f, i + 1, {
+      lineaSecundaria: `${f.campeonFavorito || 'Sin registros'} ${f.rolReciente ? '· ' + f.rolReciente + ' (reciente)' : ''}`
+    })).join('')
+  }</div>`;
 }
 
 function ordenar(criterio) {
@@ -354,14 +531,24 @@ function ordenar(criterio) {
   if (criterio === 'elo-desc') ordenadas.sort((a,b) => valorEloOrdenable(b) - valorEloOrdenable(a));
   if (criterio === 'elo-asc') ordenadas.sort((a,b) => valorEloOrdenable(a) - valorEloOrdenable(b));
   if (criterio === 'nombre') ordenadas.sort((a,b) => a.alias.localeCompare(b.alias));
-  pintarFilas(ordenadas);
+  pintarFilasLegado(ordenadas);
 }
 
 document.getElementById('ordenSelect').addEventListener('change', (e) => ordenar(e.target.value));
 
-const INTERVALO_ACTUALIZACION_MIN = 15;
+document.querySelectorAll('nav.pestanas button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('nav.pestanas button').forEach(b => b.classList.remove('activa'));
+    btn.classList.add('activa');
+    document.querySelectorAll('.vista-pestana').forEach(v => v.style.display = 'none');
+    const vista = document.getElementById('vista-' + btn.dataset.tab);
+    vista.style.display = '';
+    requestAnimationFrame(() => vista.classList.add('visible'));
+  });
+});
 
 function iniciarCuentaAtras(momentoUltimaActualizacion) {
+  const INTERVALO_ACTUALIZACION_MIN = 15;
   const bloque = document.getElementById('bloqueCuentaAtras');
   const elemento = document.getElementById('cuentaAtras');
   const proximoMomento = momentoUltimaActualizacion + INTERVALO_ACTUALIZACION_MIN * 60 * 1000;
@@ -377,7 +564,6 @@ function iniciarCuentaAtras(momentoUltimaActualizacion) {
     const segundos = Math.floor((restanteMs % 60000) / 1000);
     elemento.textContent = `${minutos}:${segundos.toString().padStart(2, '0')}`;
   }
-
   tick();
   const intervalo = setInterval(tick, 1000);
 }
@@ -385,7 +571,6 @@ function iniciarCuentaAtras(momentoUltimaActualizacion) {
 async function cargar() {
   const portal = document.getElementById('portal');
   const mensajeCarga = document.getElementById('mensajeCarga');
-  const contenido = document.getElementById('contenido');
 
   const frases = [
     "Descendiendo hacia los archivos de Riot…",
@@ -400,15 +585,12 @@ async function cargar() {
   const { data: snapshots } = await sb.from('snapshots_elo').select('*').order('fecha', { ascending: true });
   await obtenerUltimaVersion();
 
-  // Mapa id-de-campeón -> nombre, para traducir campeon_favorito_id
   let mapaCampeones = {};
   try {
     const resCampeones = await fetch(`https://ddragon.leagueoflegends.com/cdn/${versionDDragon}/data/es_ES/champion.json`);
     const dataCampeones = await resCampeones.json();
     Object.values(dataCampeones.data).forEach(c => { mapaCampeones[c.key] = c.name; });
-  } catch (e) {
-    // si falla, mostramos sin nombre de campeón favorito
-  }
+  } catch (e) { /* sin nombre de campeón favorito si falla */ }
 
   clearInterval(ciclo);
   portal.style.display = 'none';
@@ -422,19 +604,14 @@ async function cargar() {
   }
 
   if (!jugadores) {
-    contenido.innerHTML = '<p style="text-align:center;color:var(--text-dim);font-style:italic;padding:40px 0;">La cripta está en silencio. No hay datos aún.</p>';
-    contenido.classList.add('visible');
+    document.getElementById('contenido-legado').innerHTML = '<p class="estado-vacio">La cripta está en silencio. No hay datos aún.</p>';
+    document.querySelectorAll('.vista-pestana').forEach(v => v.classList.add('visible'));
     return;
   }
 
-  const ahora = new Date();
-  const diaSemana = ahora.getDay();
-  const diasDesdeLunes = diaSemana === 0 ? 6 : diaSemana - 1;
-  const inicioSemana = new Date(ahora);
-  inicioSemana.setHours(0, 0, 0, 0);
-  inicioSemana.setDate(inicioSemana.getDate() - diasDesdeLunes);
-  const hace7dias = inicioSemana.getTime();
+  const hace7dias = inicioDeSemanaLocal();
 
+  // ---------- LEGADO (all-time, sin nada semanal) ----------
   filasGlobal = jugadores.map(j => {
     const susPartidas = (partidas || []).filter(p => p.jugador_id === j.id);
     const susSnapshots = (snapshots || []).filter(s => s.jugador_id === j.id);
@@ -442,6 +619,7 @@ async function cargar() {
     const rolCrudo = modaDe(susPartidas.map(p => p.rol));
 
     return {
+      id: j.id,
       alias: j.alias,
       iconoUrl: j.icono_id ? `https://ddragon.leagueoflegends.com/cdn/${versionDDragon}/img/profileicon/${j.icono_id}.png` : null,
       tier: ultimo ? ultimo.tier : null,
@@ -451,66 +629,208 @@ async function cargar() {
       rolReciente: rolCrudo ? (NOMBRE_ROL[rolCrudo] || rolCrudo) : null,
       victorias: j.wins ?? susPartidas.filter(p => p.resultado === 'victoria').length,
       derrotas: j.losses ?? susPartidas.filter(p => p.resultado === 'derrota').length,
-      jugadorId: j.id,
+    };
+  });
+  ordenar('elo-desc');
+
+  // ---------- ESTADÍSTICAS SEMANALES COMPARTIDAS (base de Olimpo, Cementerio, Infierno, Hermandad) ----------
+  const statsSemanales = jugadores.map(j => {
+    const susPartidasSemana = (partidas || [])
+      .filter(p => p.jugador_id === j.id && new Date(p.fecha).getTime() >= hace7dias)
+      .sort((a,b) => new Date(b.fecha) - new Date(a.fecha)); // más reciente primero
+
+    const jugoEstaSemana = susPartidasSemana.length > 0;
+    const victoriasSemana = susPartidasSemana.filter(p => p.resultado === 'victoria').length;
+    const derrotasSemana = susPartidasSemana.filter(p => p.resultado === 'derrota').length;
+    const killsTotal = susPartidasSemana.reduce((s,p) => s + (p.kills || 0), 0);
+    const deathsTotal = susPartidasSemana.reduce((s,p) => s + (p.deaths || 0), 0);
+
+    // Cambio de LP: real si hay snapshots con separación real, si no, estimado
+    const susSnaps = (snapshots || []).filter(s => s.jugador_id === j.id);
+    const recientesSnaps = susSnaps.filter(s => new Date(s.fecha).getTime() >= hace7dias);
+    let cambioLp = null, esEstimado = false;
+    if (recientesSnaps.length >= 2) {
+      const primero = recientesSnaps[0];
+      const ultimo = recientesSnaps[recientesSnaps.length - 1];
+      if (new Date(ultimo.fecha).getTime() - new Date(primero.fecha).getTime() >= UNA_HORA_MS) {
+        cambioLp = ultimo.lp - primero.lp;
+      }
+    }
+    if (cambioLp === null && jugoEstaSemana) {
+      cambioLp = victoriasSemana * LP_MEDIO_VICTORIA + derrotasSemana * LP_MEDIO_DERROTA;
+      esEstimado = true;
+    }
+
+    const racha = calcularRacha(susPartidasSemana);
+
+    return {
+      id: j.id,
+      alias: j.alias,
+      iconoUrl: j.icono_id ? `https://ddragon.leagueoflegends.com/cdn/${versionDDragon}/img/profileicon/${j.icono_id}.png` : null,
+      jugoEstaSemana,
+      victorias: victoriasSemana,
+      derrotas: derrotasSemana,
+      partidasSemana: susPartidasSemana,
+      killsTotal, deathsTotal,
+      avgKills: susPartidasSemana.length ? killsTotal / susPartidasSemana.length : 0,
+      avgDeaths: susPartidasSemana.length ? deathsTotal / susPartidasSemana.length : 0,
+      cambioLp: cambioLp ?? 0,
+      esEstimado,
+      racha,
     };
   });
 
-  ordenar('elo-desc');
-  contenido.classList.add('visible');
+  const participanEstaSemana = statsSemanales.filter(s => s.jugoEstaSemana);
 
-  // Crónicas de la semana
-  const UNA_HORA_MS = 60 * 60 * 1000;
-  const LP_MEDIO_VICTORIA = 17;
-  const LP_MEDIO_DERROTA = -15;
+  // ---------- EL OLIMPO (tabla única: arriba quien más sube, abajo quien más cae) ----------
+  const tablaOlimpo = document.getElementById('tabla-olimpo');
+  if (!participanEstaSemana.length) {
+    tablaOlimpo.innerHTML = '<p class="estado-vacio">Nadie ha combatido esta semana todavía.</p>';
+  } else {
+    const { clasificados, sinClasificar } = separarPorClasificacion(
+      [...participanEstaSemana].sort((a,b) => b.cambioLp - a.cambioLp)
+    );
 
-  const cambiosLp = jugadores.map(j => {
-    const susSnaps = (snapshots || []).filter(s => s.jugador_id === j.id);
-    const recientes = susSnaps.filter(s => new Date(s.fecha).getTime() >= hace7dias);
-
-    // Dato real: hay suficientes snapshots con separación real
-    if (recientes.length >= 2) {
-      const primero = recientes[0];
-      const ultimo = recientes[recientes.length - 1];
-      if (new Date(ultimo.fecha).getTime() - new Date(primero.fecha).getTime() >= UNA_HORA_MS) {
-        return { alias: j.alias, cambio: ultimo.lp - primero.lp, estimado: false };
-      }
-    }
-
-    // Sin dato real todavía: estimación a partir de partidas de esta semana
-    const partidasSemana = (partidas || []).filter(p => p.jugador_id === j.id && new Date(p.fecha).getTime() >= hace7dias);
-    if (!partidasSemana.length) return null;
-    const victoriasSemana = partidasSemana.filter(p => p.resultado === 'victoria').length;
-    const derrotasSemana = partidasSemana.filter(p => p.resultado === 'derrota').length;
-    const cambioEstimado = victoriasSemana * LP_MEDIO_VICTORIA + derrotasSemana * LP_MEDIO_DERROTA;
-    return { alias: j.alias, cambio: cambioEstimado, estimado: true };
-  }).filter(Boolean);
-
-  const masGanado = [...cambiosLp].sort((a,b) => b.cambio - a.cambio)[0];
-  const masPerdido = [...cambiosLp].sort((a,b) => a.cambio - b.cambio)[0];
-
-  const killsSemana = jugadores.map(j => {
-    const total = (partidas || []).filter(p => p.jugador_id === j.id && new Date(p.fecha).getTime() >= hace7dias)
-      .reduce((s,p) => s + (p.kills || 0), 0);
-    return { alias: j.alias, total };
-  }).sort((a,b) => b.total - a.total)[0];
-
-  const curiosos = document.getElementById('curiosos');
-  if (curiosos) {
-    curiosos.innerHTML = `
-      <div class="tarjeta-curiosa">
-        <h3>Mayor ascenso</h3>
-        ${masGanado ? `<div class="nombre-destacado">${masGanado.alias}</div><div class="valor-destacado subida">+${masGanado.cambio} LP esta semana${masGanado.estimado ? ' (estimado)' : ''}</div>` : `<div class="valor-destacado">Aún sin suficientes datos</div>`}
-      </div>
-      <div class="tarjeta-curiosa">
-        <h3>Mayor caída</h3>
-        ${masPerdido ? `<div class="nombre-destacado">${masPerdido.alias}</div><div class="valor-destacado bajada">${masPerdido.cambio} LP esta semana${masPerdido.estimado ? ' (estimado)' : ''}</div>` : `<div class="valor-destacado">Aún sin suficientes datos</div>`}
-      </div>
-      <div class="tarjeta-curiosa">
-        <h3>Más sangriento</h3>
-        ${killsSemana && killsSemana.total > 0 ? `<div class="nombre-destacado">${killsSemana.alias}</div><div class="valor-destacado">${killsSemana.total} kills esta semana</div>` : `<div class="valor-destacado">Aún sin suficientes datos</div>`}
-      </div>
+    tablaOlimpo.innerHTML = `
+      <div class="lista-jugadores">${
+        clasificados.map((f, i) => filaHtml(f, i + 1, {
+          valorPersonalizado: `${f.cambioLp >= 0 ? '+' : ''}${f.cambioLp}`,
+          etiquetaValor: `LP${f.esEstimado ? ' · estimado' : ''}`,
+          colorValor: f.cambioLp >= 0 ? 'subida' : 'bajada',
+          ocultarWinrate: true,
+          enRacha: f.racha.tipo === 'victoria' && f.racha.largo >= RACHA_MINIMA_PARA_FUEGO,
+          enMaldicion: f.racha.tipo === 'derrota' && f.racha.largo >= RACHA_MINIMA_PARA_FUEGO,
+          largoRacha: f.racha.largo,
+          lineaSecundaria: `${f.victorias}V ${f.derrotas}D esta semana`,
+        })).join('')
+      }</div>
+      ${bloqueSinClasificarHtml(sinClasificar, f => `${f.cambioLp >= 0 ? '+' : ''}${f.cambioLp} LP`)}
     `;
   }
+
+  // ---------- EL CEMENTERIO (media de muertes) ----------
+  const tablaCementerio = document.getElementById('tabla-cementerio');
+  if (!participanEstaSemana.length) {
+    tablaCementerio.innerHTML = '<p class="estado-vacio">Nadie ha combatido esta semana todavía.</p>';
+  } else {
+    const { clasificados, sinClasificar } = separarPorClasificacion(
+      [...participanEstaSemana].sort((a,b) => b.avgDeaths - a.avgDeaths)
+    );
+    tablaCementerio.innerHTML = `
+      <div class="lista-jugadores">${
+        clasificados.map((f, i) => filaHtml(f, i + 1, {
+          valorPersonalizado: f.avgDeaths.toFixed(1),
+          etiquetaValor: 'muertes/partida',
+          colorValor: 'bajada',
+          ocultarWinrate: true,
+          lineaSecundaria: `${f.deathsTotal} muertes en ${f.partidasSemana.length} partidas`,
+        })).join('')
+      }</div>
+      ${bloqueSinClasificarHtml(sinClasificar, f => `${f.avgDeaths.toFixed(1)} muertes/partida`)}
+    `;
+  }
+
+  // ---------- EL INFIERNO (media de kills) ----------
+  const tablaInfierno = document.getElementById('tabla-infierno');
+  if (!participanEstaSemana.length) {
+    tablaInfierno.innerHTML = '<p class="estado-vacio">Nadie ha combatido esta semana todavía.</p>';
+  } else {
+    const { clasificados, sinClasificar } = separarPorClasificacion(
+      [...participanEstaSemana].sort((a,b) => b.avgKills - a.avgKills)
+    );
+    tablaInfierno.innerHTML = `
+      <div class="lista-jugadores">${
+        clasificados.map((f, i) => filaHtml(f, i + 1, {
+          valorPersonalizado: f.avgKills.toFixed(1),
+          etiquetaValor: 'kills/partida',
+          colorValor: 'subida',
+          ocultarWinrate: true,
+          lineaSecundaria: `${f.killsTotal} kills en ${f.partidasSemana.length} partidas`,
+        })).join('')
+      }</div>
+      ${bloqueSinClasificarHtml(sinClasificar, f => `${f.avgKills.toFixed(1)} kills/partida`)}
+    `;
+  }
+
+  // ---------- LA HERMANDAD (dúos) ----------
+  const tablaHermandad = document.getElementById('tabla-hermandad');
+  const statsMap = {};
+  statsSemanales.forEach(s => { statsMap[s.id] = s; });
+
+  const duosMap = {}; // clave: "idA|idB" (ordenados) -> { partidasJuntos: [...] }
+  const idsConDatos = participanEstaSemana.map(s => s.id);
+
+  for (let a = 0; a < idsConDatos.length; a++) {
+    for (let b = a + 1; b < idsConDatos.length; b++) {
+      const idA = idsConDatos[a], idB = idsConDatos[b];
+      const partidasA = statsMap[idA].partidasSemana;
+      const partidasB = statsMap[idB].partidasSemana;
+      const compartidas = [];
+      partidasA.forEach(pa => {
+        const pareja = partidasB.find(pb => pb.match_id === pa.match_id);
+        if (pareja) compartidas.push(pa.resultado);
+      });
+      if (compartidas.length > 0) {
+        duosMap[idA + '|' + idB] = { idA, idB, partidasJuntos: compartidas };
+      }
+    }
+  }
+
+  const duos = Object.values(duosMap).map(d => {
+    const jA = statsMap[d.idA], jB = statsMap[d.idB];
+    const victoriasJuntos = d.partidasJuntos.filter(r => r === 'victoria').length;
+    const derrotasJuntos = d.partidasJuntos.filter(r => r === 'derrota').length;
+    const lpNeto = jA.cambioLp + jB.cambioLp;
+    const totalJuntos = d.partidasJuntos.length;
+    const winratejuntos = totalJuntos ? Math.round((victoriasJuntos / totalJuntos) * 100) : 0;
+    return { jA, jB, victoriasJuntos, derrotasJuntos, lpNeto, totalJuntos, winratejuntos };
+  }).sort((a,b) => b.lpNeto - a.lpNeto);
+
+  if (!duos.length) {
+    tablaHermandad.innerHTML = '<p class="estado-vacio">Ninguna pareja ha compartido partida esta semana todavía.</p>';
+  } else {
+    const tarjetaDuoHtml = (d, puesto) => {
+      const claseTop = puesto === 1 ? 'puesto-1' : puesto === 2 ? 'puesto-2' : puesto === 3 ? 'puesto-3' : '';
+      return `
+      <div class="tarjeta-duo ${claseTop}">
+        <div class="duo-v2-fila">
+          <span class="puesto">${puesto}</span>
+          <div class="duo-v2-nombres">
+            <div class="duo-v2-avatares">
+              ${d.jA.iconoUrl ? `<img class="avatar-mini" src="${d.jA.iconoUrl}" alt="">` : ''}
+              ${d.jB.iconoUrl ? `<img class="avatar-mini" src="${d.jB.iconoUrl}" alt="">` : ''}
+            </div>
+            <span class="duo-v2-nombres-texto">${d.jA.alias} &amp; ${d.jB.alias}</span>
+          </div>
+          <div class="duo-v2-datos">
+            <div class="duo-v2-dato">
+              <div class="valor ${d.lpNeto >= 0 ? 'subida' : 'bajada'}">${d.lpNeto >= 0 ? '+' : ''}${d.lpNeto}</div>
+              <div class="etiqueta">LP neto</div>
+            </div>
+            <div class="duo-v2-dato">
+              <div class="valor">${d.winratejuntos}%</div>
+              <div class="etiqueta">Winrate</div>
+            </div>
+            <div class="duo-v2-dato">
+              <div class="valor">${d.totalJuntos}</div>
+              <div class="etiqueta">Partidas</div>
+            </div>
+          </div>
+        </div>
+        <div class="duo-v2-barra-wrap">
+          <div class="duo-v2-barra">
+            <div class="segmento-victorias" style="width:${d.winratejuntos}%"></div>
+            <div class="segmento-derrotas" style="width:${100 - d.winratejuntos}%"></div>
+          </div>
+        </div>
+      </div>`;
+    };
+
+    tablaHermandad.innerHTML = duos.map((d, i) => tarjetaDuoHtml(d, i + 1)).join('');
+  }
+
+  document.getElementById('contenido-legado').classList.add('visible');
+  document.querySelectorAll('.vista-pestana').forEach(v => v.classList.add('visible'));
 }
 
 cargar();
