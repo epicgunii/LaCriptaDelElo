@@ -60,6 +60,10 @@
   .linea-ornamento .barra { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-dead), transparent); }
   .linea-ornamento .rombo { width: 7px; height: 7px; background: var(--blood-bright); transform: rotate(45deg); box-shadow: 0 0 8px rgba(156,46,31,0.6); }
   .subtitulo { font-style: italic; color: var(--text-dim); font-size: 0.98rem; }
+  .ultima-actualizacion {
+    margin-top: 14px; font-family: 'Cinzel', serif; font-size: 0.68rem;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim);
+  }
 
   section { margin-bottom: 56px; }
 
@@ -146,6 +150,7 @@
     <h1>La Cripta del Elo</h1>
     <div class="linea-ornamento"><span class="barra"></span><span class="rombo"></span><span class="barra"></span></div>
     <p class="subtitulo">El registro no olvida a nadie</p>
+    <p class="ultima-actualizacion" id="ultimaActualizacion"></p>
   </header>
 
   <div class="portal" id="portal">
@@ -198,6 +203,20 @@ async function cargar() {
 
   clearInterval(ciclo);
   portal.style.display = 'none';
+
+  // Sello de última actualización, según el snapshot más reciente
+  if (snapshots && snapshots.length) {
+    const masReciente = new Date(snapshots[snapshots.length - 1].fecha).getTime();
+    const minutos = Math.floor((Date.now() - masReciente) / 60000);
+    let texto;
+    if (minutos < 1) texto = 'Actualizado hace instantes';
+    else if (minutos < 60) texto = `Actualizado hace ${minutos} minuto${minutos === 1 ? '' : 's'}`;
+    else {
+      const horas = Math.floor(minutos / 60);
+      texto = `Actualizado hace ${horas} hora${horas === 1 ? '' : 's'}`;
+    }
+    document.getElementById('ultimaActualizacion').textContent = texto;
+  }
 
   if (!jugadores) {
     contenido.innerHTML = '<p class="estado-carga">La cripta está en silencio. No hay datos aún.</p>';
