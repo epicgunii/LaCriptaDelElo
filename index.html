@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La Cripta del Elo</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Spectral:ital,wght@0,400;0,500;1,400&display=swap');
+
+  :root {
+    --void: #050505;
+    --iron: #101011;
+    --iron-light: #17171a;
+    --gold-dead: #5c4d33;
+    --gold-corrupt: #93733a;
+    --gold-glow: #c79f4f;
+    --blood: #5c1c17;
+    --blood-bright: #9c2e1f;
+    --text: #b9b2a0;
+    --text-dim: #55503f;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--void); min-height: 100%; }
+
+  body {
+    font-family: 'Spectral', serif;
+    color: var(--text);
+    padding: 50px 18px 90px;
+    position: relative;
+    background:
+      radial-gradient(ellipse 90% 40% at 50% -10%, rgba(92,28,23,0.18), transparent 55%),
+      radial-gradient(ellipse 120% 90% at 50% 50%, transparent 40%, rgba(0,0,0,0.8) 100%),
+      linear-gradient(180deg, #0a0a0b, var(--void) 70%);
+  }
+
+  .grano {
+    position: fixed; inset: 0; z-index: 10; pointer-events: none; opacity: 0.045; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .vineta { position: fixed; inset: 0; z-index: 9; pointer-events: none; box-shadow: inset 0 0 200px 70px rgba(0,0,0,0.85); }
+  .fog {
+    position: fixed; inset: 0; pointer-events: none; z-index: 1;
+    background-image:
+      radial-gradient(ellipse 55% 35% at 15% 15%, rgba(92,77,51,0.06), transparent 70%),
+      radial-gradient(ellipse 45% 30% at 85% 85%, rgba(92,28,23,0.07), transparent 70%);
+    animation: drift 26s ease-in-out infinite alternate;
+  }
+  @keyframes drift { 0% { transform: translate(-3%,0); } 100% { transform: translate(3%,2%); } }
+
+  main { position: relative; z-index: 2; max-width: 1000px; margin: 0 auto; }
+
+  header { text-align: center; margin-bottom: 50px; }
+  h1 {
+    font-family: 'Cinzel', serif; font-weight: 700; letter-spacing: 0.14em;
+    font-size: clamp(1.8rem, 6vw, 2.6rem); color: var(--gold-corrupt); text-transform: uppercase;
+    text-shadow: 0 0 4px rgba(156,46,31,0.5), 0 0 22px rgba(92,28,23,0.4);
+  }
+  .linea-ornamento { display: flex; align-items: center; gap: 10px; margin: 16px auto 6px; width: 100%; max-width: 320px; }
+  .linea-ornamento .barra { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-dead), transparent); }
+  .linea-ornamento .rombo { width: 7px; height: 7px; background: var(--blood-bright); transform: rotate(45deg); box-shadow: 0 0 8px rgba(156,46,31,0.6); }
+  .subtitulo { font-style: italic; color: var(--text-dim); font-size: 0.98rem; }
+
+  section { margin-bottom: 56px; }
+
+  h2.seccion {
+    font-family: 'Cinzel', serif; font-size: 0.95rem; font-weight: 600; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--gold-corrupt); margin-bottom: 22px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  h2.seccion::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--gold-dead), transparent); }
+
+  /* Panel general */
+  .panel {
+    position: relative;
+    background: linear-gradient(180deg, var(--iron-light), var(--iron));
+    clip-path: polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px);
+    border: 1px solid var(--gold-dead);
+    padding: 4px;
+  }
+  .panel-inner { padding: 4px; }
+
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text-dim); text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--gold-dead);
+  }
+  tbody td { padding: 13px 14px; border-bottom: 1px solid rgba(92,77,51,0.14); font-size: 0.95rem; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: rgba(156,46,31,0.05); }
+
+  .celda-invocador { display: flex; align-items: center; gap: 12px; }
+  .icono-invocador {
+    width: 34px; height: 34px; border-radius: 3px;
+    border: 1px solid var(--gold-corrupt);
+    filter: grayscale(0.25) contrast(1.05);
+    flex-shrink: 0;
+  }
+  .alias { color: var(--text); font-weight: 500; }
+  .rango { color: var(--gold-glow); font-family: 'Cinzel', serif; font-size: 0.82rem; letter-spacing: 0.04em; }
+  .lp { color: var(--text-dim); font-size: 0.85rem; }
+  .champ, .rol { color: var(--text-dim); font-size: 0.9rem; }
+
+  .subida { color: #7a9868; }
+  .bajada { color: var(--blood-bright); }
+
+  .grid-curiosos { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+  .tarjeta-curiosa { padding: 26px 22px; }
+  .tarjeta-curiosa h3 {
+    font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-dim); margin-bottom: 14px;
+  }
+  .tarjeta-curiosa .nombre-destacado {
+    font-family: 'Cinzel', serif; font-size: 1.3rem; color: var(--gold-glow); letter-spacing: 0.02em;
+  }
+  .tarjeta-curiosa .valor-destacado { margin-top: 6px; font-size: 0.95rem; color: var(--text-dim); font-style: italic; }
+
+  .estado-carga {
+    text-align: center; color: var(--text-dim); font-style: italic; padding: 60px 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="fog"></div>
+<div class="vineta"></div>
+<div class="grano"></div>
+
+<main>
+  <header>
+    <h1>La Cripta del Elo</h1>
+    <div class="linea-ornamento"><span class="barra"></span><span class="rombo"></span><span class="barra"></span></div>
+    <p class="subtitulo">El registro no olvida a nadie</p>
+  </header>
+
+  <div id="contenido">
+    <p class="estado-carga">Despertando a los muertos…</p>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://hoblsxbbhtvjqysprhuu.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhvYmxzeGJiaHR2anF5c3ByaHV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk0MjAwMzYsImV4cCI6MjEwNDk5NjAzNn0.ffiRUg-0lj1Fm8TIUbBi6X_cHXdCxuhAMcwWhz96fTo";
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+function modaDe(arr) {
+  if (!arr.length) return '—';
+  const cuenta = {};
+  arr.forEach(v => { if (v) cuenta[v] = (cuenta[v] || 0) + 1; });
+  return Object.entries(cuenta).sort((a,b) => b[1]-a[1])[0]?.[0] || '—';
+}
+
+async function cargar() {
+  const contenido = document.getElementById('contenido');
+
+  const { data: jugadores } = await sb.from('jugadores').select('*');
+  const { data: partidas } = await sb.from('partidas').select('*');
+  const { data: snapshots } = await sb.from('snapshots_elo').select('*').order('fecha', { ascending: true });
+
+  if (!jugadores) {
+    contenido.innerHTML = '<p class="estado-carga">La cripta está en silencio. No hay datos aún.</p>';
+    return;
+  }
+
+  const ahora = Date.now();
+  const hace7dias = ahora - 7 * 24 * 60 * 60 * 1000;
+
+  const filasLeaderboard = jugadores.map(j => {
+    const susPartidas = (partidas || []).filter(p => p.jugador_id === j.id);
+    const susSnapshots = (snapshots || []).filter(s => s.jugador_id === j.id);
+    const ultimo = susSnapshots[susSnapshots.length - 1];
+
+    const campeonTop = modaDe(susPartidas.map(p => p.campeon));
+    const rolTop = modaDe(susPartidas.map(p => p.rol));
+    const victorias = susPartidas.filter(p => p.resultado === 'victoria').length;
+    const derrotas = susPartidas.filter(p => p.resultado === 'derrota').length;
+
+    return {
+      alias: j.alias,
+      iconoUrl: j.icono_id ? `https://ddragon.leagueoflegends.com/cdn/14.19.1/img/profileicon/${j.icono_id}.png` : null,
+      tier: ultimo ? ultimo.tier : null,
+      division: ultimo ? ultimo.division : null,
+      lp: ultimo ? ultimo.lp : null,
+      campeonTop, rolTop, victorias, derrotas,
+    };
+  }).sort((a, b) => (b.lp || 0) - (a.lp || 0));
+
+  // Rankings semanales
+  const cambiosLp = jugadores.map(j => {
+    const susSnaps = (snapshots || []).filter(s => s.jugador_id === j.id);
+    const recientes = susSnaps.filter(s => new Date(s.fecha).getTime() >= hace7dias);
+    if (recientes.length < 2) return { alias: j.alias, cambio: null };
+    const cambio = recientes[recientes.length - 1].lp - recientes[0].lp;
+    return { alias: j.alias, cambio };
+  }).filter(r => r.cambio !== null);
+
+  const masGanado = [...cambiosLp].sort((a,b) => b.cambio - a.cambio)[0];
+  const masPerdido = [...cambiosLp].sort((a,b) => a.cambio - b.cambio)[0];
+
+  const killsSemana = jugadores.map(j => {
+    const susPartidas = (partidas || []).filter(p => p.jugador_id === j.id && new Date(p.fecha).getTime() >= hace7dias);
+    const total = susPartidas.reduce((sum, p) => sum + (p.kills || 0), 0);
+    return { alias: j.alias, total };
+  }).sort((a,b) => b.total - a.total)[0];
+
+  contenido.innerHTML = `
+    <section>
+      <h2 class="seccion">Leaderboard</h2>
+      <div class="panel"><div class="panel-inner">
+        <table>
+          <thead><tr>
+            <th>Invocador</th><th>Rango</th><th>Campeón favorito</th><th>Rol favorito</th><th>V / D</th>
+          </tr></thead>
+          <tbody>
+            ${filasLeaderboard.map(f => `
+              <tr>
+                <td><div class="celda-invocador">${f.iconoUrl ? `<img class="icono-invocador" src="${f.iconoUrl}" alt="">` : ''}<span class="alias">${f.alias}</span></div></td>
+                <td><span class="rango">${f.tier ? f.tier + ' ' + f.division : 'Sin clasificar'}</span>${f.lp !== null ? `<div class="lp">${f.lp} LP</div>` : ''}</td>
+                <td class="champ">${f.campeonTop}</td>
+                <td class="rol">${f.rolTop}</td>
+                <td>${f.victorias} / ${f.derrotas}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div></div>
+    </section>
+
+    <section>
+      <h2 class="seccion">Crónicas de la semana</h2>
+      <div class="grid-curiosos">
+        <div class="panel"><div class="panel-inner tarjeta-curiosa">
+          <h3>Mayor ascenso</h3>
+          ${masGanado ? `<div class="nombre-destacado">${masGanado.alias}</div><div class="valor-destacado subida">+${masGanado.cambio} LP esta semana</div>` : `<div class="valor-destacado">Aún sin suficientes datos</div>`}
+        </div></div>
+        <div class="panel"><div class="panel-inner tarjeta-curiosa">
+          <h3>Mayor caída</h3>
+          ${masPerdido ? `<div class="nombre-destacado">${masPerdido.alias}</div><div class="valor-destacado bajada">${masPerdido.cambio} LP esta semana</div>` : `<div class="valor-destacado">Aún sin suficientes datos</div>`}
+        </div></div>
+        <div class="panel"><div class="panel-inner tarjeta-curiosa">
+          <h3>Más sangriento</h3>
+          ${killsSemana && killsSemana.total > 0 ? `<div class="nombre-destacado">${killsSemana.alias}</div><div class="valor-destacado">${killsSemana.total} kills esta semana</div>` : `<div class="valor-destacado">Aún sin suficientes datos</div>`}
+        </div></div>
+      </div>
+    </section>
+  `;
+}
+
+cargar();
+</script>
+</body>
+</html>
