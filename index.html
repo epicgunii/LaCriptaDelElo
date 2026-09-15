@@ -8,16 +8,16 @@
   @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Spectral:ital,wght@0,400;0,500;1,400&display=swap');
 
   :root {
-    --void: #050505;
-    --iron: #101011;
-    --iron-light: #17171a;
-    --gold-dead: #5c4d33;
-    --gold-corrupt: #93733a;
-    --gold-glow: #c79f4f;
-    --blood: #5c1c17;
-    --blood-bright: #9c2e1f;
-    --text: #b9b2a0;
-    --text-dim: #55503f;
+    --void: #050706;
+    --panel: #0b0f0d;
+    --panel-light: #101512;
+    --line: #1c2622;
+    --emerald: #34e0a1;
+    --emerald-dim: #1f6b52;
+    --gold: #c9a24a;
+    --text: #b8c2bb;
+    --text-dim: #5b665f;
+    --danger: #c9564a;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -29,142 +29,190 @@
     padding: 50px 18px 90px;
     position: relative;
     background:
-      radial-gradient(ellipse 90% 40% at 50% -10%, rgba(92,28,23,0.18), transparent 55%),
-      radial-gradient(ellipse 120% 90% at 50% 50%, transparent 40%, rgba(0,0,0,0.8) 100%),
-      linear-gradient(180deg, #0a0a0b, var(--void) 70%);
+      radial-gradient(ellipse 90% 40% at 50% -5%, rgba(52,224,161,0.06), transparent 55%),
+      radial-gradient(ellipse 120% 90% at 50% 50%, transparent 45%, rgba(0,0,0,0.75) 100%),
+      linear-gradient(180deg, #070908, var(--void) 70%);
   }
 
   .grano {
-    position: fixed; inset: 0; z-index: 10; pointer-events: none; opacity: 0.045; mix-blend-mode: overlay;
+    position: fixed; inset: 0; z-index: 10; pointer-events: none; opacity: 0.035; mix-blend-mode: overlay;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
   .vineta { position: fixed; inset: 0; z-index: 9; pointer-events: none; box-shadow: inset 0 0 200px 70px rgba(0,0,0,0.85); }
-  .fog {
-    position: fixed; inset: 0; pointer-events: none; z-index: 1;
-    background-image:
-      radial-gradient(ellipse 55% 35% at 15% 15%, rgba(92,77,51,0.06), transparent 70%),
-      radial-gradient(ellipse 45% 30% at 85% 85%, rgba(92,28,23,0.07), transparent 70%);
-    animation: drift 26s ease-in-out infinite alternate;
+
+  main { position: relative; z-index: 2; max-width: 900px; margin: 0 auto; }
+
+  header { text-align: center; margin-bottom: 30px; }
+  .eyebrow {
+    font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.3em;
+    color: var(--emerald); text-transform: uppercase; margin-bottom: 10px;
   }
-  @keyframes drift { 0% { transform: translate(-3%,0); } 100% { transform: translate(3%,2%); } }
-
-  main { position: relative; z-index: 2; max-width: 1000px; margin: 0 auto; }
-
-  header { text-align: center; margin-bottom: 50px; }
   h1 {
-    font-family: 'Cinzel', serif; font-weight: 700; letter-spacing: 0.14em;
-    font-size: clamp(1.8rem, 6vw, 2.6rem); color: var(--gold-corrupt); text-transform: uppercase;
-    text-shadow: 0 0 4px rgba(156,46,31,0.5), 0 0 22px rgba(92,28,23,0.4);
+    font-family: 'Cinzel', serif; font-weight: 700; letter-spacing: 0.06em;
+    font-size: clamp(2rem, 7vw, 3.1rem); color: var(--gold);
+    text-shadow: 0 0 24px rgba(201,162,74,0.25);
   }
-  .linea-ornamento { display: flex; align-items: center; gap: 10px; margin: 16px auto 6px; width: 100%; max-width: 320px; }
-  .linea-ornamento .barra { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-dead), transparent); }
-  .linea-ornamento .rombo { width: 7px; height: 7px; background: var(--blood-bright); transform: rotate(45deg); box-shadow: 0 0 8px rgba(156,46,31,0.6); }
-  .subtitulo { font-style: italic; color: var(--text-dim); font-size: 0.98rem; }
-  .ultima-actualizacion {
-    margin-top: 14px; font-family: 'Cinzel', serif; font-size: 0.68rem;
-    letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim);
+  .subtitulo {
+    margin-top: 10px; font-family: 'Cinzel', serif; font-size: 0.85rem;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim);
+  }
+  .lema {
+    margin-top: 14px; font-style: italic; color: var(--text-dim); font-size: 0.9rem;
+  }
+  .rombo-divisor {
+    width: 8px; height: 8px; background: var(--emerald); transform: rotate(45deg);
+    margin: 26px auto 0; box-shadow: 0 0 10px rgba(52,224,161,0.5);
   }
 
-  section { margin-bottom: 56px; }
+  nav.pestanas {
+    display: flex; justify-content: center; gap: 10px; margin: 34px 0 26px;
+    border-bottom: 1px solid var(--line);
+  }
+  nav.pestanas button {
+    font-family: 'Cinzel', serif; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
+    background: none; border: none; color: var(--text-dim); padding: 10px 6px 14px;
+    cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px;
+  }
+  nav.pestanas button.activa { color: var(--emerald); border-bottom-color: var(--emerald); }
+
+  .barra-estado {
+    display: flex; flex-wrap: wrap; gap: 24px; align-items: center;
+    background: var(--panel); border: 1px solid var(--line); padding: 14px 20px;
+    font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--text-dim); margin-bottom: 24px;
+  }
+  .barra-estado .conectado { color: var(--emerald); display: flex; align-items: center; gap: 6px; }
+  .barra-estado .punto { width: 6px; height: 6px; border-radius: 50%; background: var(--emerald); box-shadow: 0 0 6px var(--emerald); }
+  .barra-estado b { color: var(--text); }
+
+  .controles { display: flex; justify-content: flex-end; margin-bottom: 16px; }
+  .controles select {
+    font-family: 'Spectral', serif; font-style: italic; font-size: 0.9rem;
+    background: var(--panel); color: var(--text); border: 1px solid var(--line);
+    padding: 8px 12px;
+  }
+
+  .lista-jugadores { display: flex; flex-direction: column; gap: 10px; }
+
+  .fila-jugador {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    gap: 20px;
+    align-items: center;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-left: 2px solid var(--emerald-dim);
+    padding: 16px 20px;
+  }
+  .fila-jugador:hover { border-left-color: var(--emerald); }
+
+  .avatar { width: 52px; height: 52px; border-radius: 6px; border: 1px solid var(--line); }
+  .avatar-vacio {
+    width: 52px; height: 52px; border-radius: 6px; border: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center; color: var(--text-dim); font-size: 0.7rem;
+  }
+
+  .info-jugador { min-width: 0; }
+  .nombre-jugador { font-family: 'Cinzel', serif; font-size: 1.05rem; color: var(--gold); }
+  .tag-jugador { color: var(--text-dim); font-size: 0.85rem; margin-left: 4px; }
+  .champ-rol { color: var(--text-dim); font-size: 0.85rem; margin-top: 3px; font-style: italic; }
+
+  .bloque-elo { text-align: center; min-width: 110px; }
+  .insignia-rango {
+    display: inline-block; border: 1px solid var(--emerald-dim); color: var(--emerald);
+    font-family: 'Cinzel', serif; font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 3px 10px; margin-bottom: 6px;
+  }
+  .lp-grande { font-family: 'Cinzel', serif; font-size: 1.3rem; color: var(--text); }
+  .lp-label { font-size: 0.65rem; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
+
+  .bloque-winrate { min-width: 140px; }
+  .winrate-pct { color: var(--emerald); font-family: 'Cinzel', serif; font-size: 1rem; }
+  .barra-winrate { width: 100%; height: 4px; background: var(--line); margin: 6px 0; overflow: hidden; }
+  .barra-winrate-relleno { height: 100%; background: var(--emerald); }
+  .vd { font-size: 0.78rem; color: var(--text-dim); }
+
+  .grid-curiosos { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 30px; }
+  .tarjeta-curiosa { background: var(--panel); border: 1px solid var(--line); border-left: 2px solid var(--emerald-dim); padding: 22px 20px; }
+  .tarjeta-curiosa h3 {
+    font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-dim); margin-bottom: 12px;
+  }
+  .tarjeta-curiosa .nombre-destacado { font-family: 'Cinzel', serif; font-size: 1.2rem; color: var(--gold); }
+  .tarjeta-curiosa .valor-destacado { margin-top: 6px; font-size: 0.9rem; color: var(--text-dim); font-style: italic; }
+  .subida { color: var(--emerald); }
+  .bajada { color: var(--danger); }
 
   h2.seccion {
-    font-family: 'Cinzel', serif; font-size: 0.95rem; font-weight: 600; letter-spacing: 0.16em;
-    text-transform: uppercase; color: var(--gold-corrupt); margin-bottom: 22px;
-    display: flex; align-items: center; gap: 12px;
+    font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--emerald); margin: 40px 0 6px;
   }
-  h2.seccion::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--gold-dead), transparent); }
-
-  /* Panel general */
-  .panel {
-    position: relative;
-    background: linear-gradient(180deg, var(--iron-light), var(--iron));
-    clip-path: polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px);
-    border: 1px solid var(--gold-dead);
-    padding: 4px;
-  }
-  .panel-inner { padding: 4px; }
-
-  table { width: 100%; border-collapse: collapse; }
-  thead th {
-    font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--text-dim); text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--gold-dead);
-  }
-  tbody td { padding: 13px 14px; border-bottom: 1px solid rgba(92,77,51,0.14); font-size: 0.95rem; }
-  tbody tr:last-child td { border-bottom: none; }
-  tbody tr:hover { background: rgba(156,46,31,0.05); }
-
-  .celda-invocador { display: flex; align-items: center; gap: 12px; }
-  .icono-invocador {
-    width: 34px; height: 34px; border-radius: 3px;
-    border: 1px solid var(--gold-corrupt);
-    filter: grayscale(0.25) contrast(1.05);
-    flex-shrink: 0;
-  }
-  .alias { color: var(--text); font-weight: 500; }
-  .rango { color: var(--gold-glow); font-family: 'Cinzel', serif; font-size: 0.82rem; letter-spacing: 0.04em; }
-  .lp { color: var(--text-dim); font-size: 0.85rem; }
-  .champ, .rol { color: var(--text-dim); font-size: 0.9rem; }
-
-  .subida { color: #7a9868; }
-  .bajada { color: var(--blood-bright); }
-
-  .grid-curiosos { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
-  .tarjeta-curiosa { padding: 26px 22px; }
-  .tarjeta-curiosa h3 {
-    font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--text-dim); margin-bottom: 14px;
-  }
-  .tarjeta-curiosa .nombre-destacado {
-    font-family: 'Cinzel', serif; font-size: 1.3rem; color: var(--gold-glow); letter-spacing: 0.02em;
-  }
-  .tarjeta-curiosa .valor-destacado { margin-top: 6px; font-size: 0.95rem; color: var(--text-dim); font-style: italic; }
 
   .portal {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    min-height: 60vh; gap: 22px;
+    min-height: 50vh; gap: 20px;
   }
-  .emblema-carga { width: 74px; height: 74px; filter: drop-shadow(0 0 8px rgba(156,46,31,0.3)); }
   .runa-carga {
     width: 40px; height: 40px; position: relative; transform: rotate(45deg);
-    border: 1px solid var(--blood-bright);
+    border: 1px solid var(--emerald-dim);
     animation: pulso-carga 1.6s ease-in-out infinite;
   }
-  .runa-carga::before { content: ''; position: absolute; inset: 7px; border: 1px solid var(--gold-corrupt); }
+  .runa-carga::before { content: ''; position: absolute; inset: 7px; border: 1px solid var(--emerald); }
   @keyframes pulso-carga {
-    0%, 100% { box-shadow: 0 0 4px rgba(156,46,31,0.25); border-color: var(--blood); }
-    50% { box-shadow: 0 0 26px rgba(156,46,31,0.65); border-color: var(--blood-bright); }
+    0%, 100% { box-shadow: 0 0 4px rgba(52,224,161,0.2); border-color: var(--emerald-dim); }
+    50% { box-shadow: 0 0 24px rgba(52,224,161,0.5); border-color: var(--emerald); }
   }
-  .mensaje-carga { font-style: italic; color: var(--text-dim); font-size: 0.95rem; min-height: 1.4em; }
-  #contenido { opacity: 0; transition: opacity 0.8s ease; }
+  .mensaje-carga { font-style: italic; color: var(--text-dim); font-size: 0.92rem; }
+  #contenido { opacity: 0; transition: opacity 0.7s ease; }
   #contenido.visible { opacity: 1; }
+
+  @media (max-width: 640px) {
+    .fila-jugador { grid-template-columns: auto 1fr; grid-template-rows: auto auto; }
+    .bloque-elo, .bloque-winrate { text-align: left; grid-column: 2; }
+  }
 </style>
 </head>
 <body>
 
-<div class="fog"></div>
 <div class="vineta"></div>
 <div class="grano"></div>
 
 <main>
   <header>
+    <div class="eyebrow">✦ Rift Watch ✦</div>
     <h1>La Cripta del Elo</h1>
-    <div class="linea-ornamento"><span class="barra"></span><span class="rombo"></span><span class="barra"></span></div>
-    <p class="subtitulo">El registro no olvida a nadie</p>
-    <p class="ultima-actualizacion" id="ultimaActualizacion"></p>
+    <p class="subtitulo">Sigue el ascenso… o la caída</p>
+    <p class="lema">Los verdaderos invocadores nunca mueren &nbsp;◆&nbsp; Cada partida deja una huella en la cripta</p>
+    <div class="rombo-divisor"></div>
   </header>
 
-  <div class="portal" id="portal">
-    <svg class="emblema-carga" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="37,4 66,20 66,54 37,70 8,54 8,20" stroke="#5c4d33" stroke-width="1" opacity="0.6"/>
-      <polygon points="37,16 56,27 56,47 37,58 18,47 18,27" stroke="#93733a" stroke-width="1"/>
-      <line x1="37" y1="27" x2="37" y2="47" stroke="#9c2e1f" stroke-width="1"/>
-      <line x1="27" y1="32" x2="47" y2="42" stroke="#9c2e1f" stroke-width="1"/>
-      <line x1="47" y1="32" x2="27" y2="42" stroke="#9c2e1f" stroke-width="1"/>
-    </svg>
-    <div class="runa-carga"></div>
-    <p class="mensaje-carga" id="mensajeCarga">Descendiendo hacia los archivos de Riot…</p>
+  <nav class="pestanas">
+    <button class="activa" data-tab="seguimiento">Seguimiento</button>
+    <button data-tab="cronicas">Crónicas</button>
+  </nav>
+
+  <div class="barra-estado">
+    <span class="conectado"><span class="punto"></span> Vínculo de almas: conectado</span>
+    <span>Actualización: <b id="horaActualizacion">—</b></span>
+    <span>Vigilados: <b id="totalVigilados">0</b></span>
   </div>
-  <div id="contenido"></div>
+
+  <div id="vista-seguimiento">
+    <div class="controles">
+      <select id="ordenSelect">
+        <option value="elo-desc">Elo — de mayor a menor</option>
+        <option value="elo-asc">Elo — de menor a mayor</option>
+        <option value="nombre">Nombre (A-Z)</option>
+      </select>
+    </div>
+
+    <div class="portal" id="portal">
+      <div class="runa-carga"></div>
+      <p class="mensaje-carga" id="mensajeCarga">Descendiendo hacia los archivos de Riot…</p>
+    </div>
+
+    <div id="contenido"></div>
+  </div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -173,12 +221,70 @@ const SUPABASE_URL = "https://hoblsxbbhtvjqysprhuu.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhvYmxzeGJiaHR2anF5c3ByaHV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk0MjAwMzYsImV4cCI6MjEwNDk5NjAzNn0.ffiRUg-0lj1Fm8TIUbBi6X_cHXdCxuhAMcwWhz96fTo";
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+const RANGOS_ORDEN = ["IRON","BRONZE","SILVER","GOLD","PLATINUM","EMERALD","DIAMOND","MASTER","GRANDMASTER","CHALLENGER"];
+const DIVISION_VALOR = { "IV": 0, "III": 1, "II": 2, "I": 3 };
+
 function modaDe(arr) {
-  if (!arr.length) return '—';
+  if (!arr.length) return null;
   const cuenta = {};
   arr.forEach(v => { if (v) cuenta[v] = (cuenta[v] || 0) + 1; });
-  return Object.entries(cuenta).sort((a,b) => b[1]-a[1])[0]?.[0] || '—';
+  const entradas = Object.entries(cuenta).sort((a,b) => b[1]-a[1]);
+  return entradas.length ? entradas[0][0] : null;
 }
+
+function valorEloOrdenable(f) {
+  if (!f.tier) return -1;
+  const base = RANGOS_ORDEN.indexOf(f.tier) * 1000;
+  const div = f.division ? (DIVISION_VALOR[f.division] || 0) * 100 : 0;
+  return base + div + (f.lp || 0);
+}
+
+let filasGlobal = [];
+
+function pintarFilas(filas) {
+  const contenido = document.getElementById('contenido');
+  contenido.innerHTML = `
+    <div class="lista-jugadores">
+      ${filas.map(f => {
+        const totalPartidas = f.victorias + f.derrotas;
+        const winrate = totalPartidas ? Math.round((f.victorias / totalPartidas) * 100) : null;
+        return `
+        <div class="fila-jugador">
+          ${f.iconoUrl ? `<img class="avatar" src="${f.iconoUrl}" alt="">` : `<div class="avatar-vacio">?</div>`}
+          <div class="info-jugador">
+            <span class="nombre-jugador">${f.alias}</span>
+            <div class="champ-rol">${f.campeonTop || 'Sin registros'} ${f.rolTop ? '· ' + f.rolTop : ''}</div>
+          </div>
+          <div class="bloque-elo">
+            <div class="insignia-rango">${f.tier ? f.tier + ' ' + (f.division || '') : 'Sin clasificar'}</div>
+            <div class="lp-grande">${f.lp !== null ? f.lp : '—'}</div>
+            <div class="lp-label">LP</div>
+          </div>
+          <div class="bloque-winrate">
+            ${winrate !== null ? `
+              <div class="winrate-pct">${winrate}%</div>
+              <div class="barra-winrate"><div class="barra-winrate-relleno" style="width:${winrate}%"></div></div>
+              <div class="vd">${f.victorias}V ${f.derrotas}D</div>
+            ` : `<div class="vd">Sin partidas registradas</div>`}
+          </div>
+        </div>
+      `}).join('')}
+    </div>
+
+    <h2 class="seccion">Crónicas de la semana</h2>
+    <div class="grid-curiosos" id="curiosos"></div>
+  `;
+}
+
+function ordenar(criterio) {
+  let ordenadas = [...filasGlobal];
+  if (criterio === 'elo-desc') ordenadas.sort((a,b) => valorEloOrdenable(b) - valorEloOrdenable(a));
+  if (criterio === 'elo-asc') ordenadas.sort((a,b) => valorEloOrdenable(a) - valorEloOrdenable(b));
+  if (criterio === 'nombre') ordenadas.sort((a,b) => a.alias.localeCompare(b.alias));
+  pintarFilas(ordenadas);
+}
+
+document.getElementById('ordenSelect').addEventListener('change', (e) => ordenar(e.target.value));
 
 async function cargar() {
   const portal = document.getElementById('portal');
@@ -189,13 +295,9 @@ async function cargar() {
     "Descendiendo hacia los archivos de Riot…",
     "Leyendo las inscripciones de cada invocador…",
     "El polvo de las partidas antiguas se levanta…",
-    "Contando kills que nadie quiso recordar…",
   ];
   let i = 0;
-  const ciclo = setInterval(() => {
-    i = (i + 1) % frases.length;
-    mensajeCarga.textContent = frases[i];
-  }, 1800);
+  const ciclo = setInterval(() => { i = (i+1) % frases.length; mensajeCarga.textContent = frases[i]; }, 1500);
 
   const { data: jugadores } = await sb.from('jugadores').select('*');
   const { data: partidas } = await sb.from('partidas').select('*');
@@ -204,43 +306,31 @@ async function cargar() {
   clearInterval(ciclo);
   portal.style.display = 'none';
 
-  // Sello de última actualización, según el snapshot más reciente
+  document.getElementById('totalVigilados').textContent = jugadores ? jugadores.length : 0;
+
   if (snapshots && snapshots.length) {
-    const masReciente = new Date(snapshots[snapshots.length - 1].fecha).getTime();
-    const minutos = Math.floor((Date.now() - masReciente) / 60000);
-    let texto;
-    if (minutos < 1) texto = 'Actualizado hace instantes';
-    else if (minutos < 60) texto = `Actualizado hace ${minutos} minuto${minutos === 1 ? '' : 's'}`;
-    else {
-      const horas = Math.floor(minutos / 60);
-      texto = `Actualizado hace ${horas} hora${horas === 1 ? '' : 's'}`;
-    }
-    document.getElementById('ultimaActualizacion').textContent = texto;
+    const masReciente = new Date(snapshots[snapshots.length - 1].fecha);
+    document.getElementById('horaActualizacion').textContent = masReciente.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
   }
 
   if (!jugadores) {
-    contenido.innerHTML = '<p class="estado-carga">La cripta está en silencio. No hay datos aún.</p>';
+    contenido.innerHTML = '<p style="text-align:center;color:var(--text-dim);font-style:italic;padding:40px 0;">La cripta está en silencio. No hay datos aún.</p>';
     contenido.classList.add('visible');
     return;
   }
 
   const ahora = new Date();
-  const diaSemana = ahora.getDay(); // 0=domingo, 1=lunes...
+  const diaSemana = ahora.getDay();
   const diasDesdeLunes = diaSemana === 0 ? 6 : diaSemana - 1;
   const inicioSemana = new Date(ahora);
   inicioSemana.setHours(0, 0, 0, 0);
   inicioSemana.setDate(inicioSemana.getDate() - diasDesdeLunes);
   const hace7dias = inicioSemana.getTime();
 
-  const filasLeaderboard = jugadores.map(j => {
+  filasGlobal = jugadores.map(j => {
     const susPartidas = (partidas || []).filter(p => p.jugador_id === j.id);
     const susSnapshots = (snapshots || []).filter(s => s.jugador_id === j.id);
     const ultimo = susSnapshots[susSnapshots.length - 1];
-
-    const campeonTop = modaDe(susPartidas.map(p => p.campeon));
-    const rolTop = modaDe(susPartidas.map(p => p.rol));
-    const victorias = susPartidas.filter(p => p.resultado === 'victoria').length;
-    const derrotas = susPartidas.filter(p => p.resultado === 'derrota').length;
 
     return {
       alias: j.alias,
@@ -248,70 +338,51 @@ async function cargar() {
       tier: ultimo ? ultimo.tier : null,
       division: ultimo ? ultimo.division : null,
       lp: ultimo ? ultimo.lp : null,
-      campeonTop, rolTop, victorias, derrotas,
+      campeonTop: modaDe(susPartidas.map(p => p.campeon)),
+      rolTop: modaDe(susPartidas.map(p => p.rol)),
+      victorias: susPartidas.filter(p => p.resultado === 'victoria').length,
+      derrotas: susPartidas.filter(p => p.resultado === 'derrota').length,
+      jugadorId: j.id,
     };
-  }).sort((a, b) => (b.lp || 0) - (a.lp || 0));
+  });
 
-  // Rankings semanales
+  ordenar('elo-desc');
+  contenido.classList.add('visible');
+
+  // Crónicas de la semana
   const cambiosLp = jugadores.map(j => {
     const susSnaps = (snapshots || []).filter(s => s.jugador_id === j.id);
     const recientes = susSnaps.filter(s => new Date(s.fecha).getTime() >= hace7dias);
-    if (recientes.length < 2) return { alias: j.alias, cambio: null };
-    const cambio = recientes[recientes.length - 1].lp - recientes[0].lp;
-    return { alias: j.alias, cambio };
-  }).filter(r => r.cambio !== null);
+    if (recientes.length < 2) return null;
+    return { alias: j.alias, cambio: recientes[recientes.length - 1].lp - recientes[0].lp };
+  }).filter(Boolean);
 
   const masGanado = [...cambiosLp].sort((a,b) => b.cambio - a.cambio)[0];
   const masPerdido = [...cambiosLp].sort((a,b) => a.cambio - b.cambio)[0];
 
   const killsSemana = jugadores.map(j => {
-    const susPartidas = (partidas || []).filter(p => p.jugador_id === j.id && new Date(p.fecha).getTime() >= hace7dias);
-    const total = susPartidas.reduce((sum, p) => sum + (p.kills || 0), 0);
+    const total = (partidas || []).filter(p => p.jugador_id === j.id && new Date(p.fecha).getTime() >= hace7dias)
+      .reduce((s,p) => s + (p.kills || 0), 0);
     return { alias: j.alias, total };
   }).sort((a,b) => b.total - a.total)[0];
 
-  contenido.innerHTML = `
-    <section>
-      <h2 class="seccion">Leaderboard</h2>
-      <div class="panel"><div class="panel-inner">
-        <table>
-          <thead><tr>
-            <th>Invocador</th><th>Rango</th><th>Campeón favorito</th><th>Rol favorito</th><th>V / D</th>
-          </tr></thead>
-          <tbody>
-            ${filasLeaderboard.map(f => `
-              <tr>
-                <td><div class="celda-invocador">${f.iconoUrl ? `<img class="icono-invocador" src="${f.iconoUrl}" alt="">` : ''}<span class="alias">${f.alias}</span></div></td>
-                <td><span class="rango">${f.tier ? f.tier + ' ' + f.division : 'Sin clasificar'}</span>${f.lp !== null ? `<div class="lp">${f.lp} LP</div>` : ''}</td>
-                <td class="champ">${f.campeonTop}</td>
-                <td class="rol">${f.rolTop}</td>
-                <td>${f.victorias} / ${f.derrotas}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      </div></div>
-    </section>
-
-    <section>
-      <h2 class="seccion">Crónicas de la semana</h2>
-      <div class="grid-curiosos">
-        <div class="panel"><div class="panel-inner tarjeta-curiosa">
-          <h3>Mayor ascenso</h3>
-          ${masGanado ? `<div class="nombre-destacado">${masGanado.alias}</div><div class="valor-destacado subida">+${masGanado.cambio} LP esta semana</div>` : `<div class="valor-destacado">Aún sin suficientes datos</div>`}
-        </div></div>
-        <div class="panel"><div class="panel-inner tarjeta-curiosa">
-          <h3>Mayor caída</h3>
-          ${masPerdido ? `<div class="nombre-destacado">${masPerdido.alias}</div><div class="valor-destacado bajada">${masPerdido.cambio} LP esta semana</div>` : `<div class="valor-destacado">Aún sin suficientes datos</div>`}
-        </div></div>
-        <div class="panel"><div class="panel-inner tarjeta-curiosa">
-          <h3>Más sangriento</h3>
-          ${killsSemana && killsSemana.total > 0 ? `<div class="nombre-destacado">${killsSemana.alias}</div><div class="valor-destacado">${killsSemana.total} kills esta semana</div>` : `<div class="valor-destacado">Aún sin suficientes datos</div>`}
-        </div></div>
+  const curiosos = document.getElementById('curiosos');
+  if (curiosos) {
+    curiosos.innerHTML = `
+      <div class="tarjeta-curiosa">
+        <h3>Mayor ascenso</h3>
+        ${masGanado ? `<div class="nombre-destacado">${masGanado.alias}</div><div class="valor-destacado subida">+${masGanado.cambio} LP esta semana</div>` : `<div class="valor-destacado">Aún sin suficientes datos</div>`}
       </div>
-    </section>
-  `;
-  contenido.classList.add('visible');
+      <div class="tarjeta-curiosa">
+        <h3>Mayor caída</h3>
+        ${masPerdido ? `<div class="nombre-destacado">${masPerdido.alias}</div><div class="valor-destacado bajada">${masPerdido.cambio} LP esta semana</div>` : `<div class="valor-destacado">Aún sin suficientes datos</div>`}
+      </div>
+      <div class="tarjeta-curiosa">
+        <h3>Más sangriento</h3>
+        ${killsSemana && killsSemana.total > 0 ? `<div class="nombre-destacado">${killsSemana.alias}</div><div class="valor-destacado">${killsSemana.total} kills esta semana</div>` : `<div class="valor-destacado">Aún sin suficientes datos</div>`}
+      </div>
+    `;
+  }
 }
 
 cargar();
