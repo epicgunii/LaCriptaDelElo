@@ -423,11 +423,30 @@ async function cargar() {
   contenido.classList.add('visible');
 
   // Crónicas de la semana
+  const UNA_HORA_MS = 60 * 60 * 1000;
+  const LP_MEDIO_VICTORIA = 17;
+  const LP_MEDIO_DERROTA = -15;
+
   const cambiosLp = jugadores.map(j => {
     const susSnaps = (snapshots || []).filter(s => s.jugador_id === j.id);
     const recientes = susSnaps.filter(s => new Date(s.fecha).getTime() >= hace7dias);
-    if (recientes.length < 2) return null;
-    return { alias: j.alias, cambio: recientes[recientes.length - 1].lp - recientes[0].lp };
+
+    // Dato real: hay suficientes snapshots con separación real
+    if (recientes.length >= 2) {
+      const primero = recientes[0];
+      const ultimo = recientes[recientes.length - 1];
+      if (new Date(ultimo.fecha).getTime() - new Date(primero.fecha).getTime() >= UNA_HORA_MS) {
+        return { alias: j.alias, cambio: ultimo.lp - primero.lp, estimado: false };
+      }
+    }
+
+    // Sin dato real todavía: estimación a partir de partidas de esta semana
+    const partidasSemana = (partidas || []).filter(p => p.jugador_id === j.id && new Date(p.fecha).getTime() >= hace7dias);
+    if (!partidasSemana.length) return null;
+    const victoriasSemana = partidasSemana.filter(p => p.resultado === 'victoria').length;
+    const derrotasSemana = partidasSemana.filter(p => p.resultado === 'derrota').length;
+    const cambioEstimado = victoriasSemana * LP_MEDIO_VICTORIA + derrotasSemana * LP_MEDIO_DERROTA;
+    return { alias: j.alias, cambio: cambioEstimado, estimado: true };
   }).filter(Boolean);
 
   const masGanado = [...cambiosLp].sort((a,b) => b.cambio - a.cambio)[0];
@@ -444,11 +463,11 @@ async function cargar() {
     curiosos.innerHTML = `
       <div class="tarjeta-curiosa">
         <h3>Mayor ascenso</h3>
-        ${masGanado ? `<div class="nombre-destacado">${masGanado.alias}</div><div class="valor-destacado subida">+${masGanado.cambio} LP esta semana</div>` : `<div class="valor-destacado">Aún sin suficientes datos</div>`}
+        ${masGanado ? `<div class="nombre-destacado">${masGanado.alias}</div><div class="valor-destacado subida">+${masGanado.cambio} LP esta semana${masGanado.estimado ? ' (estimado)' : ''}</div>` : `<div class="valor-destacado">Aún sin suficientes datos</div>`}
       </div>
       <div class="tarjeta-curiosa">
         <h3>Mayor caída</h3>
-        ${masPerdido ? `<div class="nombre-destacado">${masPerdido.alias}</div><div class="valor-destacado bajada">${masPerdido.cambio} LP esta semana</div>` : `<div class="valor-destacado">Aún sin suficientes datos</div>`}
+        ${masPerdido ? `<div class="nombre-destacado">${masPerdido.alias}</div><div class="valor-destacado bajada">${masPerdido.cambio} LP esta semana${masPerdido.estimado ? ' (estimado)' : ''}</div>` : `<div class="valor-destacado">Aún sin suficientes datos</div>`}
       </div>
       <div class="tarjeta-curiosa">
         <h3>Más sangriento</h3>
