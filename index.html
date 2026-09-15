@@ -119,7 +119,7 @@
 
   .bloque-elo { text-align: center; min-width: 110px; }
   .insignia-rango {
-    display: inline-block; border: 1px solid var(--emerald-dim); color: var(--emerald);
+    display: inline-block; border: 1px solid var(--color-rango, var(--emerald-dim)); color: var(--color-rango, var(--emerald));
     font-family: 'Cinzel', serif; font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase;
     padding: 3px 10px; margin-bottom: 6px;
   }
@@ -224,6 +224,16 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const RANGOS_ORDEN = ["IRON","BRONZE","SILVER","GOLD","PLATINUM","EMERALD","DIAMOND","MASTER","GRANDMASTER","CHALLENGER"];
 const DIVISION_VALOR = { "IV": 0, "III": 1, "II": 2, "I": 3 };
 
+const COLOR_RANGO = {
+  IRON: "#8a7d6f", BRONZE: "#a3672f", SILVER: "#9aa5ab", GOLD: "#d4af37",
+  PLATINUM: "#3fa8a0", EMERALD: "#2fbf71", DIAMOND: "#4aa8e0",
+  MASTER: "#b158e0", GRANDMASTER: "#e04f4f", CHALLENGER: "#f2d675",
+};
+
+const NOMBRE_ROL = {
+  TOP: "Top", JUNGLE: "Jungla", MIDDLE: "Mid", BOTTOM: "ADC", UTILITY: "Support",
+};
+
 function modaDe(arr) {
   if (!arr.length) return null;
   const cuenta = {};
@@ -257,17 +267,17 @@ function pintarFilas(filas) {
   contenido.innerHTML = `
     <div class="lista-jugadores">
       ${filas.map(f => {
-        const totalPartidas = f.victorias + f.derrotas;
+        const totalPartidas = (f.victorias || 0) + (f.derrotas || 0);
         const winrate = totalPartidas ? Math.round((f.victorias / totalPartidas) * 100) : null;
         return `
         <div class="fila-jugador">
           ${f.iconoUrl ? `<img class="avatar" src="${f.iconoUrl}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'avatar-vacio',textContent:'?'}))">` : `<div class="avatar-vacio">?</div>`}
           <div class="info-jugador">
             <span class="nombre-jugador">${f.alias}</span>
-            <div class="champ-rol">${f.campeonTop || 'Sin registros'} ${f.rolTop ? '· ' + f.rolTop : ''}</div>
+            <div class="champ-rol">${f.campeonFavorito || 'Sin registros'} ${f.rolReciente ? '· ' + f.rolReciente : ''}</div>
           </div>
           <div class="bloque-elo">
-            <div class="insignia-rango">${f.tier ? f.tier + ' ' + (f.division || '') : 'Sin clasificar'}</div>
+            <div class="insignia-rango" style="--color-rango: ${COLOR_RANGO[f.tier] || ''}">${f.tier ? f.tier + ' ' + (f.division || '') : 'Sin clasificar'}</div>
             <div class="lp-grande">${f.lp !== null ? f.lp : '—'}</div>
             <div class="lp-label">LP</div>
           </div>
@@ -315,6 +325,16 @@ async function cargar() {
   const { data: snapshots } = await sb.from('snapshots_elo').select('*').order('fecha', { ascending: true });
   await obtenerUltimaVersion();
 
+  // Mapa id-de-campeón -> nombre, para traducir campeon_favorito_id
+  let mapaCampeones = {};
+  try {
+    const resCampeones = await fetch(`https://ddragon.leagueoflegends.com/cdn/${versionDDragon}/data/es_ES/champion.json`);
+    const dataCampeones = await resCampeones.json();
+    Object.values(dataCampeones.data).forEach(c => { mapaCampeones[c.key] = c.name; });
+  } catch (e) {
+    // si falla, mostramos sin nombre de campeón favorito
+  }
+
   clearInterval(ciclo);
   portal.style.display = 'none';
 
@@ -343,6 +363,7 @@ async function cargar() {
     const susPartidas = (partidas || []).filter(p => p.jugador_id === j.id);
     const susSnapshots = (snapshots || []).filter(s => s.jugador_id === j.id);
     const ultimo = susSnapshots[susSnapshots.length - 1];
+    const rolCrudo = modaDe(susPartidas.map(p => p.rol));
 
     return {
       alias: j.alias,
@@ -350,10 +371,10 @@ async function cargar() {
       tier: ultimo ? ultimo.tier : null,
       division: ultimo ? ultimo.division : null,
       lp: ultimo ? ultimo.lp : null,
-      campeonTop: modaDe(susPartidas.map(p => p.campeon)),
-      rolTop: modaDe(susPartidas.map(p => p.rol)),
-      victorias: susPartidas.filter(p => p.resultado === 'victoria').length,
-      derrotas: susPartidas.filter(p => p.resultado === 'derrota').length,
+      campeonFavorito: j.campeon_favorito_id ? (mapaCampeones[j.campeon_favorito_id] || null) : modaDe(susPartidas.map(p => p.campeon)),
+      rolReciente: rolCrudo ? (NOMBRE_ROL[rolCrudo] || rolCrudo) : null,
+      victorias: j.wins ?? susPartidas.filter(p => p.resultado === 'victoria').length,
+      derrotas: j.losses ?? susPartidas.filter(p => p.resultado === 'derrota').length,
       jugadorId: j.id,
     };
   });
