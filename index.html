@@ -82,7 +82,21 @@
     color: var(--text-dim); margin-bottom: 24px;
   }
   .barra-estado .conectado { color: var(--emerald); display: flex; align-items: center; gap: 6px; }
-  .barra-estado .punto { width: 6px; height: 6px; border-radius: 50%; background: var(--emerald); box-shadow: 0 0 6px var(--emerald); }
+  .barra-estado .punto {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--emerald);
+    box-shadow: 0 0 6px var(--emerald);
+    animation: parpadeo-punto 1.4s ease-in-out infinite;
+  }
+  @keyframes parpadeo-punto {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.25; }
+  }
+  .boton-refrescar {
+    font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+    background: var(--emerald-dim); color: #06110c; border: 1px solid var(--emerald);
+    padding: 4px 14px; cursor: pointer; margin-left: 4px;
+  }
+  .boton-refrescar:hover { background: var(--emerald); }
   .barra-estado b { color: var(--text); }
 
   .controles { display: flex; justify-content: flex-end; margin-bottom: 16px; }
@@ -194,6 +208,7 @@
   <div class="barra-estado">
     <span class="conectado"><span class="punto"></span> Vínculo de almas: conectado</span>
     <span>Actualización: <b id="horaActualizacion">—</b></span>
+    <span id="bloqueCuentaAtras">Próxima actualización: <b id="cuentaAtras">—</b></span>
     <span>Vigilados: <b id="totalVigilados">0</b></span>
   </div>
 
@@ -307,6 +322,29 @@ function ordenar(criterio) {
 
 document.getElementById('ordenSelect').addEventListener('change', (e) => ordenar(e.target.value));
 
+const INTERVALO_ACTUALIZACION_MIN = 15;
+
+function iniciarCuentaAtras(momentoUltimaActualizacion) {
+  const bloque = document.getElementById('bloqueCuentaAtras');
+  const elemento = document.getElementById('cuentaAtras');
+  const proximoMomento = momentoUltimaActualizacion + INTERVALO_ACTUALIZACION_MIN * 60 * 1000;
+
+  function tick() {
+    const restanteMs = proximoMomento - Date.now();
+    if (restanteMs <= 0) {
+      bloque.innerHTML = `<button class="boton-refrescar" onclick="location.reload()">Refrescar la cripta</button>`;
+      clearInterval(intervalo);
+      return;
+    }
+    const minutos = Math.floor(restanteMs / 60000);
+    const segundos = Math.floor((restanteMs % 60000) / 1000);
+    elemento.textContent = `${minutos}:${segundos.toString().padStart(2, '0')}`;
+  }
+
+  tick();
+  const intervalo = setInterval(tick, 1000);
+}
+
 async function cargar() {
   const portal = document.getElementById('portal');
   const mensajeCarga = document.getElementById('mensajeCarga');
@@ -343,6 +381,7 @@ async function cargar() {
   if (snapshots && snapshots.length) {
     const masReciente = new Date(snapshots[snapshots.length - 1].fecha);
     document.getElementById('horaActualizacion').textContent = masReciente.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+    iniciarCuentaAtras(masReciente.getTime());
   }
 
   if (!jugadores) {
