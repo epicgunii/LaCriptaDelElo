@@ -115,9 +115,24 @@
   }
   .tarjeta-curiosa .valor-destacado { margin-top: 6px; font-size: 0.95rem; color: var(--text-dim); font-style: italic; }
 
-  .estado-carga {
-    text-align: center; color: var(--text-dim); font-style: italic; padding: 60px 0;
+  .portal {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: 60vh; gap: 22px;
   }
+  .emblema-carga { width: 74px; height: 74px; filter: drop-shadow(0 0 8px rgba(156,46,31,0.3)); }
+  .runa-carga {
+    width: 40px; height: 40px; position: relative; transform: rotate(45deg);
+    border: 1px solid var(--blood-bright);
+    animation: pulso-carga 1.6s ease-in-out infinite;
+  }
+  .runa-carga::before { content: ''; position: absolute; inset: 7px; border: 1px solid var(--gold-corrupt); }
+  @keyframes pulso-carga {
+    0%, 100% { box-shadow: 0 0 4px rgba(156,46,31,0.25); border-color: var(--blood); }
+    50% { box-shadow: 0 0 26px rgba(156,46,31,0.65); border-color: var(--blood-bright); }
+  }
+  .mensaje-carga { font-style: italic; color: var(--text-dim); font-size: 0.95rem; min-height: 1.4em; }
+  #contenido { opacity: 0; transition: opacity 0.8s ease; }
+  #contenido.visible { opacity: 1; }
 </style>
 </head>
 <body>
@@ -133,9 +148,18 @@
     <p class="subtitulo">El registro no olvida a nadie</p>
   </header>
 
-  <div id="contenido">
-    <p class="estado-carga">Despertando a los muertos…</p>
+  <div class="portal" id="portal">
+    <svg class="emblema-carga" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="37,4 66,20 66,54 37,70 8,54 8,20" stroke="#5c4d33" stroke-width="1" opacity="0.6"/>
+      <polygon points="37,16 56,27 56,47 37,58 18,47 18,27" stroke="#93733a" stroke-width="1"/>
+      <line x1="37" y1="27" x2="37" y2="47" stroke="#9c2e1f" stroke-width="1"/>
+      <line x1="27" y1="32" x2="47" y2="42" stroke="#9c2e1f" stroke-width="1"/>
+      <line x1="47" y1="32" x2="27" y2="42" stroke="#9c2e1f" stroke-width="1"/>
+    </svg>
+    <div class="runa-carga"></div>
+    <p class="mensaje-carga" id="mensajeCarga">Descendiendo hacia los archivos de Riot…</p>
   </div>
+  <div id="contenido"></div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -152,19 +176,42 @@ function modaDe(arr) {
 }
 
 async function cargar() {
+  const portal = document.getElementById('portal');
+  const mensajeCarga = document.getElementById('mensajeCarga');
   const contenido = document.getElementById('contenido');
+
+  const frases = [
+    "Descendiendo hacia los archivos de Riot…",
+    "Leyendo las inscripciones de cada invocador…",
+    "El polvo de las partidas antiguas se levanta…",
+    "Contando kills que nadie quiso recordar…",
+  ];
+  let i = 0;
+  const ciclo = setInterval(() => {
+    i = (i + 1) % frases.length;
+    mensajeCarga.textContent = frases[i];
+  }, 1800);
 
   const { data: jugadores } = await sb.from('jugadores').select('*');
   const { data: partidas } = await sb.from('partidas').select('*');
   const { data: snapshots } = await sb.from('snapshots_elo').select('*').order('fecha', { ascending: true });
 
+  clearInterval(ciclo);
+  portal.style.display = 'none';
+
   if (!jugadores) {
     contenido.innerHTML = '<p class="estado-carga">La cripta está en silencio. No hay datos aún.</p>';
+    contenido.classList.add('visible');
     return;
   }
 
-  const ahora = Date.now();
-  const hace7dias = ahora - 7 * 24 * 60 * 60 * 1000;
+  const ahora = new Date();
+  const diaSemana = ahora.getDay(); // 0=domingo, 1=lunes...
+  const diasDesdeLunes = diaSemana === 0 ? 6 : diaSemana - 1;
+  const inicioSemana = new Date(ahora);
+  inicioSemana.setHours(0, 0, 0, 0);
+  inicioSemana.setDate(inicioSemana.getDate() - diasDesdeLunes);
+  const hace7dias = inicioSemana.getTime();
 
   const filasLeaderboard = jugadores.map(j => {
     const susPartidas = (partidas || []).filter(p => p.jugador_id === j.id);
@@ -245,6 +292,7 @@ async function cargar() {
       </div>
     </section>
   `;
+  contenido.classList.add('visible');
 }
 
 cargar();
