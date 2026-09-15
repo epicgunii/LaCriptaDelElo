@@ -230,6 +230,12 @@
   #vista-olimpo h2.seccion { color: var(--gold); }
   #vista-olimpo .fila-jugador.puesto-1 { box-shadow: 0 0 22px rgba(212,175,55,0.12); }
 
+  .tres-lp { display: flex; gap: 22px; flex-shrink: 0; }
+  .tres-lp-dato { text-align: center; min-width: 60px; }
+  .tres-lp-valor { font-family: 'Cinzel', serif; font-size: 1.05rem; display: flex; align-items: center; justify-content: center; gap: 4px; }
+  .tres-lp-valor .flecha { font-size: 0.7rem; }
+  .tres-lp-etiqueta { font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); margin-top: 2px; }
+
   /* El Cementerio: tétrico, niebla y grises apagados */
   #vista-cementerio .fila-jugador { border-left-color: #4a4658; background: linear-gradient(90deg, rgba(74,70,88,0.08), var(--panel) 45%); }
   #vista-cementerio .fila-jugador:hover { border-left-color: #7a7290; }
@@ -323,24 +329,54 @@
   }
   .aviso-proximamente .detalle { font-style: italic; color: var(--text-dim); font-size: 0.82rem; background: rgba(11,15,13,0.85); padding: 2px 10px; }
 
+  .fila-datos { display: contents; }
+
   @media (max-width: 640px) {
-    body { padding: 30px 12px 70px; }
-    .fila-jugador { grid-template-columns: auto auto 1fr; grid-template-rows: auto auto; gap: 12px; padding: 14px 14px; }
-    .bloque-elo, .bloque-winrate { text-align: left; grid-column: 3; }
+    body { padding: 24px 10px 60px; }
 
-    nav.pestanas { gap: 2px 6px; }
-    nav.pestanas button { font-size: 0.62rem; padding: 8px 2px 12px; }
+    header .eyebrow { font-size: 0.62rem; letter-spacing: 0.2em; }
+    .lema { font-size: 0.8rem; padding: 0 6px; }
 
-    .barra-estado { gap: 10px 16px; font-size: 0.62rem; padding: 12px 14px; }
+    nav.pestanas { gap: 2px 4px; }
+    nav.pestanas button { font-size: 0.6rem; padding: 8px 3px 12px; letter-spacing: 0.04em; }
+
+    .barra-estado { gap: 8px 14px; font-size: 0.6rem; padding: 10px 12px; }
+
+    .controles { justify-content: stretch; }
+    .controles select { width: 100%; }
+
+    /* Filas de jugador: pasa a flex para que los datos bajen limpiamente a su propia línea */
+    .fila-jugador {
+      display: flex; flex-wrap: wrap; align-items: center;
+      gap: 10px 12px; padding: 14px 14px;
+    }
+    .fila-jugador .puesto { min-width: 18px; }
+    .fila-jugador .avatar, .fila-jugador .avatar-vacio { width: 42px; height: 42px; flex-shrink: 0; }
+    .fila-jugador .info-jugador { flex: 1 1 auto; min-width: 0; }
+    .fila-jugador .nombre-jugador { font-size: 0.95rem; }
+    .fila-jugador .champ-rol { font-size: 0.78rem; }
+
+    .fila-datos {
+      display: flex !important; flex-basis: 100%; justify-content: space-between;
+      align-items: center; gap: 10px; padding-top: 8px; border-top: 1px solid var(--line);
+      margin-top: 2px;
+    }
+    .bloque-elo, .bloque-winrate { text-align: left; min-width: 0; }
+    .barra-winrate { width: 90px; }
+
+    .tres-lp { flex-basis: 100%; justify-content: space-between; gap: 8px; padding-top: 8px; border-top: 1px solid var(--line); margin-top: 2px; }
+    .tres-lp-dato { min-width: auto; }
 
     .duo-v2-fila { flex-wrap: wrap; row-gap: 10px; }
     .duo-v2-nombres { flex-basis: 100%; }
-    .duo-v2-datos { flex-basis: 100%; justify-content: space-between; gap: 10px; margin-left: 34px; }
+    .duo-v2-datos { flex-basis: 100%; justify-content: space-between; gap: 10px; margin-left: 0; }
     .duo-v2-dato { min-width: auto; }
-    .tarjeta-duo { padding: 16px 16px; }
+    .tarjeta-duo { padding: 16px 14px; }
 
-    .fila-sin-clasificar { flex-wrap: wrap; row-gap: 6px; }
-    .fila-sin-clasificar .nota-clasificacion { margin-left: 0; text-align: left; flex-basis: 100%; }
+    .fila-sin-clasificar { flex-wrap: wrap; row-gap: 6px; padding: 10px 14px; }
+    .fila-sin-clasificar .nota-clasificacion { margin-left: 0; text-align: left; flex-basis: 100%; font-size: 0.72rem; }
+
+    h2.seccion { font-size: 0.75rem; margin: 30px 0 6px; }
   }
 </style>
 </head>
@@ -517,6 +553,33 @@ function filaHtml(f, puesto, opciones = {}) {
   const totalPartidas = (f.victorias || 0) + (f.derrotas || 0);
   const winrate = totalPartidas ? Math.round((f.victorias / totalPartidas) * 100) : null;
 
+  if (opciones.tresColumnasLp) {
+    const { ganados, perdidos, neto } = opciones.tresColumnasLp;
+    return `
+      <div class="fila-jugador ${claseTop} ${claseRacha}">
+        <span class="puesto">${puesto}</span>
+        ${f.iconoUrl ? `<img class="avatar" src="${f.iconoUrl}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'avatar-vacio',textContent:'?'}))">` : `<div class="avatar-vacio">?</div>`}
+        <div class="info-jugador">
+          <span class="nombre-jugador">${f.alias}</span>${opciones.enRacha ? `<span class="etiqueta-racha">Racha x${opciones.largoRacha}</span>` : ''}${opciones.enMaldicion ? `<span class="etiqueta-maldicion">Maldición x${opciones.largoRacha}</span>` : ''}
+          <div class="champ-rol">${opciones.lineaSecundaria || ''}</div>
+        </div>
+        <div class="tres-lp">
+          <div class="tres-lp-dato">
+            <div class="tres-lp-valor subida"><span class="flecha">▲</span>${ganados}</div>
+            <div class="tres-lp-etiqueta">Ganados</div>
+          </div>
+          <div class="tres-lp-dato">
+            <div class="tres-lp-valor bajada"><span class="flecha">▼</span>${perdidos}</div>
+            <div class="tres-lp-etiqueta">Perdidos</div>
+          </div>
+          <div class="tres-lp-dato">
+            <div class="tres-lp-valor ${neto >= 0 ? 'subida' : 'bajada'}">${neto >= 0 ? '+' : ''}${neto}</div>
+            <div class="tres-lp-etiqueta">Total</div>
+          </div>
+        </div>
+      </div>`;
+  }
+
   const bloqueDerecho = opciones.valorPersonalizado
     ? `<div class="bloque-elo"><div class="lp-grande ${opciones.colorValor || ''}">${opciones.valorPersonalizado}</div><div class="lp-label">${opciones.etiquetaValor || ''}</div></div>`
     : `<div class="bloque-elo">
@@ -547,8 +610,10 @@ function filaHtml(f, puesto, opciones = {}) {
         <span class="nombre-jugador">${f.alias}</span>${opciones.enRacha ? `<span class="etiqueta-racha">Racha x${opciones.largoRacha}</span>` : ''}${opciones.enMaldicion ? `<span class="etiqueta-maldicion">Maldición x${opciones.largoRacha}</span>` : ''}
         <div class="champ-rol">${opciones.lineaSecundaria || ''}</div>
       </div>
-      ${bloqueDerecho}
-      ${bloqueWinrate}
+      <div class="fila-datos">
+        ${bloqueDerecho}
+        ${bloqueWinrate}
+      </div>
     </div>`;
 }
 
@@ -680,19 +745,32 @@ async function cargar() {
     const killsTotal = susPartidasSemana.reduce((s,p) => s + (p.kills || 0), 0);
     const deathsTotal = susPartidasSemana.reduce((s,p) => s + (p.deaths || 0), 0);
 
-    // Cambio de LP: real si hay snapshots con separación real, si no, estimado
+    // Cambio de LP: real (a partir de diferencias entre snapshots consecutivos) si hay histórico suficiente, si no, estimado
     const susSnaps = (snapshots || []).filter(s => s.jugador_id === j.id);
-    const recientesSnaps = susSnaps.filter(s => new Date(s.fecha).getTime() >= hace7dias);
-    let cambioLp = null, esEstimado = false;
+    const recientesSnaps = susSnaps.filter(s => new Date(s.fecha).getTime() >= hace7dias)
+      .sort((a,b) => new Date(a.fecha) - new Date(b.fecha)); // más antiguo primero, para calcular diferencias en orden
+
+    let cambioLp = null, lpGanados = null, lpPerdidos = null, esEstimado = false;
+
     if (recientesSnaps.length >= 2) {
       const primero = recientesSnaps[0];
       const ultimo = recientesSnaps[recientesSnaps.length - 1];
       if (new Date(ultimo.fecha).getTime() - new Date(primero.fecha).getTime() >= UNA_HORA_MS) {
+        let sumaGanados = 0, sumaPerdidos = 0;
+        for (let k = 1; k < recientesSnaps.length; k++) {
+          const diferencia = recientesSnaps[k].lp - recientesSnaps[k-1].lp;
+          if (diferencia > 0) sumaGanados += diferencia;
+          else if (diferencia < 0) sumaPerdidos += Math.abs(diferencia);
+        }
+        lpGanados = sumaGanados;
+        lpPerdidos = sumaPerdidos;
         cambioLp = ultimo.lp - primero.lp;
       }
     }
     if (cambioLp === null && jugoEstaSemana) {
-      cambioLp = victoriasSemana * LP_MEDIO_VICTORIA + derrotasSemana * LP_MEDIO_DERROTA;
+      lpGanados = victoriasSemana * LP_MEDIO_VICTORIA;
+      lpPerdidos = derrotasSemana * Math.abs(LP_MEDIO_DERROTA);
+      cambioLp = lpGanados - lpPerdidos;
       esEstimado = true;
     }
 
@@ -710,6 +788,8 @@ async function cargar() {
       avgKills: susPartidasSemana.length ? killsTotal / susPartidasSemana.length : 0,
       avgDeaths: susPartidasSemana.length ? deathsTotal / susPartidasSemana.length : 0,
       cambioLp: cambioLp ?? 0,
+      lpGanados: lpGanados ?? 0,
+      lpPerdidos: lpPerdidos ?? 0,
       esEstimado,
       racha,
     };
@@ -729,14 +809,15 @@ async function cargar() {
     tablaOlimpo.innerHTML = `
       <div class="lista-jugadores">${
         clasificados.map((f, i) => filaHtml(f, i + 1, {
-          valorPersonalizado: `${f.cambioLp >= 0 ? '+' : ''}${f.cambioLp}`,
-          etiquetaValor: `LP${f.esEstimado ? ' · estimado' : ''}`,
-          colorValor: f.cambioLp >= 0 ? 'subida' : 'bajada',
-          ocultarWinrate: true,
+          tresColumnasLp: {
+            ganados: f.lpGanados,
+            perdidos: f.lpPerdidos,
+            neto: f.cambioLp,
+          },
           enRacha: f.racha.tipo === 'victoria' && f.racha.largo >= RACHA_MINIMA_PARA_FUEGO,
           enMaldicion: f.racha.tipo === 'derrota' && f.racha.largo >= RACHA_MINIMA_PARA_FUEGO,
           largoRacha: f.racha.largo,
-          lineaSecundaria: `${f.victorias}V ${f.derrotas}D esta semana`,
+          lineaSecundaria: `${f.victorias}V ${f.derrotas}D esta semana${f.esEstimado ? ' · LP aprox.' : ''}`,
         })).join('')
       }</div>
       ${bloqueSinClasificarHtml(sinClasificar, f => `${f.cambioLp >= 0 ? '+' : ''}${f.cambioLp} LP`)}
