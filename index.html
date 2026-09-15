@@ -826,7 +826,23 @@ async function cargar() {
       </div>`;
     };
 
-    tablaHermandad.innerHTML = duos.map((d, i) => tarjetaDuoHtml(d, i + 1)).join('');
+    const duosClasificados = duos.filter(d => d.totalJuntos >= MINIMO_PARTIDAS_PARA_CLASIFICAR);
+    const duosSinClasificar = duos.filter(d => d.totalJuntos < MINIMO_PARTIDAS_PARA_CLASIFICAR);
+
+    tablaHermandad.innerHTML = duosClasificados.map((d, i) => tarjetaDuoHtml(d, i + 1)).join('') + (
+      duosSinClasificar.length ? `
+        <div class="bloque-sin-clasificar">
+          <p class="subseccion">Sin clasificar todavía</p>
+          ${duosSinClasificar.map(d => `
+            <div class="fila-sin-clasificar">
+              ${d.jA.iconoUrl ? `<img class="avatar-mini" src="${d.jA.iconoUrl}" alt="">` : ''}
+              ${d.jB.iconoUrl ? `<img class="avatar-mini" src="${d.jB.iconoUrl}" alt="">` : ''}
+              <span class="nombre-jugador">${d.jA.alias} &amp; ${d.jB.alias}</span>
+              <span class="nota-clasificacion">${d.totalJuntos} partida${d.totalJuntos === 1 ? '' : 's'} juntos · necesitan ${MINIMO_PARTIDAS_PARA_CLASIFICAR - d.totalJuntos} más para clasificar</span>
+            </div>
+          `).join('')}
+        </div>` : ''
+    );
   }
 
   document.getElementById('contenido-legado').classList.add('visible');
