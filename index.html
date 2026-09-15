@@ -144,6 +144,7 @@
   .winrate-pct { color: var(--emerald); font-family: 'Cinzel', serif; font-size: 1rem; }
   .barra-winrate { width: 100%; height: 4px; background: var(--line); margin: 6px 0; overflow: hidden; }
   .barra-winrate-relleno { height: 100%; background: var(--emerald); }
+  .barra-winrate-relleno.relleno-bajada { background: var(--danger); }
   .vd { font-size: 0.78rem; color: var(--text-dim); }
 
   .grid-curiosos { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 30px; }
@@ -289,7 +290,7 @@ function pintarFilas(filas) {
           ${f.iconoUrl ? `<img class="avatar" src="${f.iconoUrl}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'avatar-vacio',textContent:'?'}))">` : `<div class="avatar-vacio">?</div>`}
           <div class="info-jugador">
             <span class="nombre-jugador">${f.alias}</span>
-            <div class="champ-rol">${f.campeonFavorito || 'Sin registros'} ${f.rolReciente ? '· ' + f.rolReciente : ''}</div>
+            <div class="champ-rol">${f.campeonFavorito || 'Sin registros'} ${f.rolReciente ? '· ' + f.rolReciente + ' (reciente)' : ''}</div>
           </div>
           <div class="bloque-elo">
             <div class="insignia-rango" style="--color-rango: ${COLOR_RANGO[f.tier] || ''}">${f.tier ? f.tier + ' ' + (f.division || '') : 'Sin clasificar'}</div>
@@ -298,8 +299,8 @@ function pintarFilas(filas) {
           </div>
           <div class="bloque-winrate">
             ${winrate !== null ? `
-              <div class="winrate-pct">${winrate}%</div>
-              <div class="barra-winrate"><div class="barra-winrate-relleno" style="width:${winrate}%"></div></div>
+              <div class="winrate-pct ${winrate >= 50 ? 'subida' : 'bajada'}">${winrate}%</div>
+              <div class="barra-winrate"><div class="barra-winrate-relleno ${winrate >= 50 ? '' : 'relleno-bajada'}" style="width:${winrate}%"></div></div>
               <div class="vd">${f.victorias}V ${f.derrotas}D</div>
             ` : `<div class="vd">Sin partidas registradas</div>`}
           </div>
