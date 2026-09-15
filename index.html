@@ -264,6 +264,16 @@
   #vista-hermandad .tarjeta-duo { border-left-color: #a3703f; padding: 22px 26px; }
   #vista-hermandad .tarjeta-duo:hover { border-left-color: #d99a5c; }
 
+  /* El Guardián: protector, tono acero/azul */
+  #vista-guardian .fila-jugador { border-left-color: #4a7a94; }
+  #vista-guardian .fila-jugador:hover { border-left-color: #6fa8c4; }
+  #vista-guardian .lema { color: #6fa8c4; }
+  #vista-guardian::before {
+    content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background: radial-gradient(ellipse 70% 40% at 50% 0%, rgba(111,168,196,0.06), transparent 60%);
+  }
+  #vista-guardian .fila-jugador.puesto-1 { box-shadow: 0 0 20px rgba(111,168,196,0.15); }
+
   .duo-v2-fila { display: flex; align-items: center; gap: 16px; padding: 6px 0; }
   .duo-v2-nombres { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
   .duo-v2-avatares { display: flex; }
@@ -354,6 +364,7 @@
     <button data-tab="cementerio">El Cementerio</button>
     <button data-tab="infierno">El Infierno</button>
     <button data-tab="hermandad">La Hermandad</button>
+    <button data-tab="guardian">El Guardián</button>
   </nav>
 
   <div class="barra-estado">
@@ -397,6 +408,11 @@
   <div id="vista-hermandad" class="vista-pestana" style="display:none">
     <p class="lema" style="margin-bottom: 20px">Las parejas que más han ganado juntas esta semana</p>
     <div id="tabla-hermandad"></div>
+  </div>
+
+  <div id="vista-guardian" class="vista-pestana" style="display:none">
+    <p class="lema" style="margin-bottom: 20px">Solo cuenta el sacrificio en el rol de Support, esta semana</p>
+    <div id="tabla-guardian"></div>
   </div>
 </main>
 
@@ -509,7 +525,12 @@ function filaHtml(f, puesto, opciones = {}) {
         <div class="lp-label">LP</div>
       </div>`;
 
-  const bloqueWinrate = opciones.ocultarWinrate ? '' : `
+  const bloqueWinrate = opciones.ocultarWinrate ? '' : opciones.bloqueSecundario ? `
+      <div class="bloque-winrate">
+        <div class="winrate-pct ${opciones.bloqueSecundario.color || 'subida'}">${opciones.bloqueSecundario.total}</div>
+        <div class="lp-label" style="margin-top:2px">${opciones.bloqueSecundario.etiquetaTotal}</div>
+        <div class="vd" style="margin-top:4px">${opciones.bloqueSecundario.media} de media/partida</div>
+      </div>` : `
       <div class="bloque-winrate">
         ${winrate !== null ? `
           <div class="winrate-pct ${winrate >= 50 ? 'subida' : 'bajada'}">${winrate}%</div>
@@ -736,8 +757,8 @@ async function cargar() {
           valorPersonalizado: f.avgDeaths.toFixed(1),
           etiquetaValor: 'muertes/partida',
           colorValor: 'bajada',
-          ocultarWinrate: true,
-          lineaSecundaria: `${f.deathsTotal} muertes en ${f.partidasSemana.length} partidas`,
+          bloqueSecundario: { total: f.deathsTotal, etiquetaTotal: 'muertes totales', media: f.avgDeaths.toFixed(1), color: 'bajada' },
+          lineaSecundaria: `${f.partidasSemana.length} partidas esta semana`,
         })).join('')
       }</div>
       ${bloqueSinClasificarHtml(sinClasificar, f => `${f.avgDeaths.toFixed(1)} muertes/partida`)}
@@ -758,8 +779,8 @@ async function cargar() {
           valorPersonalizado: f.avgKills.toFixed(1),
           etiquetaValor: 'kills/partida',
           colorValor: 'subida',
-          ocultarWinrate: true,
-          lineaSecundaria: `${f.killsTotal} kills en ${f.partidasSemana.length} partidas`,
+          bloqueSecundario: { total: f.killsTotal, etiquetaTotal: 'kills totales', media: f.avgKills.toFixed(1), color: 'subida' },
+          lineaSecundaria: `${f.partidasSemana.length} partidas esta semana`,
         })).join('')
       }</div>
       ${bloqueSinClasificarHtml(sinClasificar, f => `${f.avgKills.toFixed(1)} kills/partida`)}
@@ -857,6 +878,47 @@ async function cargar() {
           `).join('')}
         </div>` : ''
     );
+  }
+
+  // ---------- EL GUARDIÁN (kill participation y asistencias, solo partidas de Support) ----------
+  const tablaGuardian = document.getElementById('tabla-guardian');
+  const statsSupport = jugadores.map(j => {
+    const partidasSupportSemana = (partidas || []).filter(p =>
+      p.jugador_id === j.id &&
+      p.rol === 'UTILITY' &&
+      new Date(p.fecha).getTime() >= hace7dias
+    );
+    const conKP = partidasSupportSemana.filter(p => p.kill_participation !== null && p.kill_participation !== undefined);
+    const avgKP = conKP.length ? conKP.reduce((s,p) => s + Number(p.kill_participation), 0) / conKP.length : null;
+    const totalAsistencias = partidasSupportSemana.reduce((s,p) => s + (p.assists || 0), 0);
+    const avgAsistencias = partidasSupportSemana.length ? totalAsistencias / partidasSupportSemana.length : 0;
+
+    return {
+      id: j.id, alias: j.alias,
+      iconoUrl: j.icono_id ? `https://ddragon.leagueoflegends.com/cdn/${versionDDragon}/img/profileicon/${j.icono_id}.png` : null,
+      partidasSemana: partidasSupportSemana,
+      avgKP, totalAsistencias, avgAsistencias,
+    };
+  }).filter(s => s.partidasSemana.length > 0);
+
+  if (!statsSupport.length) {
+    tablaGuardian.innerHTML = '<p class="estado-vacio">Nadie ha jugado de Support esta semana todavía.</p>';
+  } else {
+    const { clasificados, sinClasificar } = separarPorClasificacion(
+      [...statsSupport].sort((a,b) => (b.avgKP ?? -1) - (a.avgKP ?? -1))
+    );
+    tablaGuardian.innerHTML = `
+      <div class="lista-jugadores">${
+        clasificados.map((f, i) => filaHtml(f, i + 1, {
+          valorPersonalizado: f.avgKP !== null ? Math.round(f.avgKP * 100) + '%' : '—',
+          etiquetaValor: 'kill participation',
+          colorValor: 'subida',
+          bloqueSecundario: { total: f.totalAsistencias, etiquetaTotal: 'asist. totales', media: f.avgAsistencias.toFixed(1), color: 'subida' },
+          lineaSecundaria: `${f.partidasSemana.length} partidas de Support esta semana`,
+        })).join('')
+      }</div>
+      ${bloqueSinClasificarHtml(sinClasificar, f => f.avgKP !== null ? `${Math.round(f.avgKP*100)}% KP` : 'sin datos de KP')}
+    `;
   }
 
   document.getElementById('contenido-legado').classList.add('visible');
