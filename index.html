@@ -652,6 +652,7 @@ function iniciarCuentaAtras(momentoUltimaActualizacion) {
   const bloque = document.getElementById('bloqueCuentaAtras');
   const elemento = document.getElementById('cuentaAtras');
   const proximoMomento = momentoUltimaActualizacion + INTERVALO_ACTUALIZACION_MIN * 60 * 1000;
+  let intervalo;
 
   function tick() {
     const restanteMs = proximoMomento - Date.now();
@@ -665,7 +666,7 @@ function iniciarCuentaAtras(momentoUltimaActualizacion) {
     elemento.textContent = `${minutos}:${segundos.toString().padStart(2, '0')}`;
   }
   tick();
-  const intervalo = setInterval(tick, 1000);
+  intervalo = setInterval(tick, 1000);
 }
 
 async function cargar() {
