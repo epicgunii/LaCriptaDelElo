@@ -331,6 +331,144 @@
 
   .fila-datos { display: contents; }
 
+  /* ---- Desafíos de la Semana (El Olimpo) ---- */
+  .desafios-cripta {
+    position: relative;
+    margin-bottom: 44px;
+    padding: 28px 24px 26px;
+    background:
+      radial-gradient(ellipse 120% 100% at 50% 0%, rgba(212,175,55,0.10), transparent 65%),
+      linear-gradient(160deg, rgba(20,22,16,0.9), rgba(10,11,9,0.95));
+    border: 1px solid rgba(212,175,55,0.35);
+    overflow: hidden;
+  }
+  .desafios-cripta::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    background: linear-gradient(115deg, transparent 20%, rgba(212,175,55,0.10) 40%, rgba(238,232,205,0.16) 50%, rgba(212,175,55,0.10) 60%, transparent 80%);
+    background-size: 250% 250%;
+    animation: brillo-demacia 6s ease-in-out infinite;
+  }
+  @keyframes brillo-demacia {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .desafios-cripta::after {
+    content: '';
+    position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    box-shadow: inset 0 0 40px rgba(212,175,55,0.12);
+    border: 1px solid transparent;
+    animation: pulso-marco 3.6s ease-in-out infinite;
+  }
+  @keyframes pulso-marco {
+    0%, 100% { box-shadow: inset 0 0 30px rgba(212,175,55,0.10); }
+    50%      { box-shadow: inset 0 0 55px rgba(238,232,205,0.18); }
+  }
+  .desafios-cabecera { position: relative; z-index: 1; text-align: center; margin-bottom: 22px; }
+  .desafios-eyebrow {
+    font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: #eee8cd; text-shadow: 0 0 12px rgba(212,175,55,0.6);
+  }
+  .desafios-titulo {
+    font-family: 'Cinzel', serif; font-weight: 700; font-size: 1.5rem; letter-spacing: 0.05em;
+    margin-top: 6px;
+    background: linear-gradient(90deg, #b9c2c8, #f2e6b8, #d4af37, #f2e6b8, #b9c2c8);
+    background-size: 200% auto;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: texto-dorado 5s linear infinite;
+  }
+  @keyframes texto-dorado { to { background-position: 200% center; } }
+
+  .rejilla-desafios {
+    position: relative; z-index: 1;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  }
+  .tarjeta-desafio {
+    position: relative; overflow: hidden;
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.2));
+    border: 1px solid rgba(212,175,55,0.3);
+    padding: 18px 16px 16px;
+    text-align: center;
+  }
+  .tarjeta-desafio.completado-alguien {
+    border-color: #d4af37;
+    box-shadow: 0 0 22px rgba(212,175,55,0.22);
+  }
+  .tarjeta-desafio .dificultad-etiqueta {
+    font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase;
+    display: inline-block; padding: 2px 10px; margin-bottom: 12px; border: 1px solid;
+  }
+  .dificultad-facil   { color: #b9c2c8; border-color: #b9c2c8; }
+  .dificultad-media   { color: #d4af37; border-color: #d4af37; }
+  .dificultad-dificil { color: #f2d675; border-color: #f2d675; text-shadow: 0 0 8px rgba(242,214,117,0.5); }
+
+  .tarjeta-desafio .desafio-descripcion {
+    font-family: 'Spectral', serif; font-size: 0.92rem; color: var(--text); min-height: 44px;
+  }
+  .tarjeta-desafio .desafio-puntos {
+    font-family: 'Cinzel', serif; font-size: 1.15rem; margin-top: 12px; color: #f2e6b8;
+    text-shadow: 0 0 10px rgba(212,175,55,0.4);
+  }
+  .tarjeta-desafio .desafio-puntos small { font-size: 0.6rem; letter-spacing: 0.1em; color: var(--text-dim); display: block; text-transform: uppercase; margin-top: 2px; }
+  .tarjeta-desafio .desafio-avance {
+    margin-top: 12px; font-size: 0.72rem; color: var(--text-dim); font-style: italic;
+  }
+  .tarjeta-desafio .desafio-avance b { color: #d4af37; font-style: normal; }
+
+  .desafios-cripta .boton-participa-wrap { position: relative; z-index: 1; text-align: center; margin-top: 24px; }
+  .boton-participa {
+    font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 0.16em; text-transform: uppercase;
+    background: linear-gradient(90deg, #8a6f24, #d4af37, #f2e6b8, #d4af37, #8a6f24);
+    background-size: 200% auto;
+    color: #14150f; border: none; padding: 12px 38px; cursor: pointer;
+    box-shadow: 0 0 18px rgba(212,175,55,0.35);
+    animation: texto-dorado 4s linear infinite;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .boton-participa:hover { transform: translateY(-1px); box-shadow: 0 0 28px rgba(212,175,55,0.55); }
+
+  @media (max-width: 640px) {
+    .rejilla-desafios { grid-template-columns: 1fr; }
+    .desafios-cripta { padding: 22px 16px 20px; }
+  }
+
+  /* ---- La Cripta (ladder de puntos permanentes) ---- */
+  #vista-cripta .fila-jugador { border-left-color: #d4af37; }
+  #vista-cripta .fila-jugador:hover { border-left-color: #f2e6b8; }
+  #vista-cripta .lema { color: #d4af37; }
+  #vista-cripta::before {
+    content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background: radial-gradient(ellipse 70% 40% at 50% 0%, rgba(212,175,55,0.07), transparent 60%);
+  }
+  #vista-cripta .fila-jugador.puesto-1 { box-shadow: 0 0 24px rgba(212,175,55,0.18); }
+
+  /* ---- Pestaña oculta de progreso de desafíos ---- */
+  #vista-progreso { display: none; }
+  #vista-progreso.visible { display: block; }
+  .progreso-cabecera { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+  .boton-volver {
+    font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+    background: none; color: var(--text-dim); border: 1px solid var(--line); padding: 8px 16px; cursor: pointer;
+  }
+  .boton-volver:hover { color: var(--gold); border-color: var(--gold); }
+  .progreso-bloque-desafio { margin-bottom: 40px; }
+  .progreso-desafio-titulo {
+    font-family: 'Cinzel', serif; font-size: 1rem; color: #f2e6b8; margin-bottom: 4px;
+  }
+  .progreso-desafio-meta { font-size: 0.8rem; color: var(--text-dim); font-style: italic; margin-bottom: 16px; }
+  .fila-progreso {
+    display: flex; align-items: center; gap: 16px;
+    background: var(--panel); border: 1px solid var(--line); border-left: 2px solid var(--line);
+    padding: 12px 18px; margin-bottom: 8px;
+  }
+  .fila-progreso.conseguido { border-left-color: #d4af37; background: linear-gradient(90deg, rgba(212,175,55,0.06), var(--panel) 45%); }
+  .fila-progreso .puesto-progreso { font-family: 'Cinzel', serif; min-width: 24px; text-align: center; color: var(--text-dim); }
+  .fila-progreso.conseguido .puesto-progreso { color: #d4af37; }
+  .fila-progreso .nombre-jugador { flex: 1; }
+  .fila-progreso .puntos-progreso { font-family: 'Cinzel', serif; color: #f2e6b8; }
+  .fila-progreso .bonus-progreso { font-size: 0.7rem; color: #d4af37; margin-left: 8px; }
+  .fila-progreso .estado-sin-clasificar { font-style: italic; color: var(--text-dim); font-size: 0.82rem; }
+
   @media (max-width: 640px) {
     body { padding: 24px 10px 60px; }
 
@@ -401,6 +539,7 @@
     <button data-tab="infierno">El Infierno</button>
     <button data-tab="hermandad">La Hermandad</button>
     <button data-tab="guardian">El Guardián</button>
+    <button data-tab="cripta">La Cripta</button>
   </nav>
 
   <div class="barra-estado">
@@ -427,8 +566,25 @@
   </div>
 
   <div id="vista-olimpo" class="vista-pestana" style="display:none">
+    <div class="desafios-cripta">
+      <div class="desafios-cabecera">
+        <div class="desafios-eyebrow">✦ La Luz de la Cripta ✦</div>
+        <div class="desafios-titulo">Desafíos de la Semana</div>
+      </div>
+      <div class="rejilla-desafios" id="rejilla-desafios">
+        <p class="estado-vacio">Cargando los desafíos…</p>
+      </div>
+      <div class="boton-participa-wrap">
+        <button class="boton-participa" onclick="mostrarProgreso()">Participa</button>
+      </div>
+    </div>
     <p class="lema" style="margin-bottom: 20px">Solo cuentan quienes han combatido esta semana</p>
     <div id="tabla-olimpo"></div>
+  </div>
+
+  <div id="vista-cripta" class="vista-pestana" style="display:none">
+    <p class="lema" style="margin-bottom: 20px">Los puntos de cripta se ganan cumpliendo desafíos y no se pierden jamás</p>
+    <div id="tabla-cripta"></div>
   </div>
 
   <div id="vista-cementerio" class="vista-pestana" style="display:none">
@@ -449,6 +605,14 @@
   <div id="vista-guardian" class="vista-pestana" style="display:none">
     <p class="lema" style="margin-bottom: 20px">Solo cuenta el sacrificio en el rol de Support, esta semana</p>
     <div id="tabla-guardian"></div>
+  </div>
+
+  <div id="vista-progreso" class="vista-pestana">
+    <div class="progreso-cabecera">
+      <p class="lema" style="margin: 0">El progreso de todos en los desafíos de esta semana</p>
+      <button class="boton-volver" onclick="ocultarProgreso()">← Volver a El Olimpo</button>
+    </div>
+    <div id="contenido-progreso"></div>
   </div>
 </main>
 
@@ -636,6 +800,126 @@ function ordenar(criterio) {
 
 document.getElementById('ordenSelect').addEventListener('change', (e) => ordenar(e.target.value));
 
+let cacheDesafiosSemana = [];
+let cacheDesafiosProgreso = [];
+const ORDEN_DIFICULTAD = { facil: 0, media: 1, dificil: 2 };
+const BONUS_TEXTO = [' · +100 (1º)', ' · +50 (2º)', ' · +25 (3º)'];
+
+async function cargarDesafios() {
+  const rejilla = document.getElementById('rejilla-desafios');
+  const { data: semanaData, error: errSemana } = await sb
+    .from('desafios_semana')
+    .select('id, semana_inicio, desafios_pool(id, descripcion, dificultad, puntos_base)');
+  const { data: progresoData, error: errProgreso } = await sb
+    .from('desafios_progreso')
+    .select('*, jugadores(alias, icono_id)');
+
+  if (errSemana || errProgreso || !semanaData) {
+    rejilla.innerHTML = '<p class="estado-vacio">No se pudieron cargar los desafíos.</p>';
+    return;
+  }
+
+  cacheDesafiosSemana = semanaData;
+  cacheDesafiosProgreso = progresoData || [];
+
+  if (!semanaData.length) {
+    rejilla.innerHTML = '<p class="estado-vacio">No hay desafíos activos esta semana.</p>';
+    return;
+  }
+
+  const semanaOrdenada = [...semanaData].sort((a,b) => ORDEN_DIFICULTAD[a.desafios_pool.dificultad] - ORDEN_DIFICULTAD[b.desafios_pool.dificultad]);
+
+  rejilla.innerHTML = semanaOrdenada.map(d => {
+    const conseguidos = cacheDesafiosProgreso.filter(p => p.desafio_semana_id === d.id && p.conseguido);
+    return `
+      <div class="tarjeta-desafio ${conseguidos.length > 0 ? 'completado-alguien' : ''}">
+        <span class="dificultad-etiqueta dificultad-${d.desafios_pool.dificultad}">${d.desafios_pool.dificultad}</span>
+        <div class="desafio-descripcion">${d.desafios_pool.descripcion}</div>
+        <div class="desafio-puntos">${d.desafios_pool.puntos_base} pts<small>puntos de cripta</small></div>
+        <div class="desafio-avance">${conseguidos.length > 0 ? `<b>${conseguidos.length}</b> ${conseguidos.length === 1 ? 'ya lo ha conseguido' : 'ya lo han conseguido'}` : 'Nadie lo ha conseguido todavía'}</div>
+      </div>`;
+  }).join('');
+}
+
+function renderProgreso() {
+  const contenedor = document.getElementById('contenido-progreso');
+  if (!cacheDesafiosSemana.length) {
+    contenedor.innerHTML = '<p class="estado-vacio">No hay desafíos activos esta semana.</p>';
+    return;
+  }
+  const semanaOrdenada = [...cacheDesafiosSemana].sort((a,b) => ORDEN_DIFICULTAD[a.desafios_pool.dificultad] - ORDEN_DIFICULTAD[b.desafios_pool.dificultad]);
+
+  contenedor.innerHTML = semanaOrdenada.map(d => {
+    const filasDeEste = cacheDesafiosProgreso.filter(p => p.desafio_semana_id === d.id);
+    const conseguidos = filasDeEste.filter(p => p.conseguido)
+      .sort((a,b) => new Date(a.fecha_consecucion) - new Date(b.fecha_consecucion));
+    const sinClasificar = filasDeEste.filter(p => !p.conseguido);
+
+    const avatarHtml = (p) => p.jugadores?.icono_id
+      ? `<img class="avatar-mini" src="https://ddragon.leagueoflegends.com/cdn/${versionDDragon}/img/profileicon/${p.jugadores.icono_id}.png" alt="">`
+      : '';
+
+    return `
+      <div class="progreso-bloque-desafio">
+        <div class="progreso-desafio-titulo">${d.desafios_pool.descripcion}</div>
+        <div class="progreso-desafio-meta">${d.desafios_pool.dificultad} · ${d.desafios_pool.puntos_base} pts base</div>
+        ${conseguidos.map((p, i) => `
+          <div class="fila-progreso conseguido">
+            <span class="puesto-progreso">${i + 1}</span>
+            ${avatarHtml(p)}
+            <span class="nombre-jugador">${p.jugadores?.alias || 'Desconocido'}</span>
+            <span class="puntos-progreso">${p.puntos_ganados ?? d.desafios_pool.puntos_base} pts${i < 3 ? `<span class="bonus-progreso">${BONUS_TEXTO[i]}</span>` : ''}</span>
+          </div>`).join('')}
+        ${sinClasificar.map(p => `
+          <div class="fila-progreso">
+            <span class="puesto-progreso">—</span>
+            ${avatarHtml(p)}
+            <span class="nombre-jugador">${p.jugadores?.alias || 'Desconocido'}</span>
+            <span class="estado-sin-clasificar">Sin clasificar</span>
+          </div>`).join('')}
+      </div>`;
+  }).join('');
+}
+
+function mostrarProgreso() {
+  document.querySelectorAll('.vista-pestana').forEach(v => v.style.display = 'none');
+  const vista = document.getElementById('vista-progreso');
+  vista.style.display = '';
+  renderProgreso();
+  vista.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function ocultarProgreso() {
+  document.querySelectorAll('nav.pestanas button').forEach(b => b.classList.remove('activa'));
+  document.querySelector('nav.pestanas button[data-tab="olimpo"]').classList.add('activa');
+  document.querySelectorAll('.vista-pestana').forEach(v => v.style.display = 'none');
+  document.getElementById('vista-olimpo').style.display = '';
+}
+
+function pintarCripta(jugadoresRaw) {
+  const tabla = document.getElementById('tabla-cripta');
+  const filas = jugadoresRaw.map(j => ({
+    id: j.id,
+    alias: j.alias,
+    iconoUrl: j.icono_id ? `https://ddragon.leagueoflegends.com/cdn/${versionDDragon}/img/profileicon/${j.icono_id}.png` : null,
+    puntosCripta: j.puntos_cripta || 0,
+  })).sort((a, b) => b.puntosCripta - a.puntosCripta);
+
+  if (!filas.length) {
+    tabla.innerHTML = '<p class="estado-vacio">La cripta está en silencio. No hay datos aún.</p>';
+    return;
+  }
+
+  tabla.innerHTML = `<div class="lista-jugadores">${
+    filas.map((f, i) => filaHtml(f, i + 1, {
+      valorPersonalizado: f.puntosCripta,
+      etiquetaValor: 'puntos de cripta',
+      colorValor: 'subida',
+      ocultarWinrate: true,
+    })).join('')
+  }</div>`;
+}
+
 document.querySelectorAll('nav.pestanas button').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('nav.pestanas button').forEach(b => b.classList.remove('activa'));
@@ -751,6 +1035,8 @@ async function cargar() {
     };
   });
   ordenar('elo-desc');
+  pintarCripta(jugadores);
+  cargarDesafios();
 
   // ---------- ESTADÍSTICAS SEMANALES COMPARTIDAS (base de Olimpo, Cementerio, Infierno, Hermandad) ----------
   const statsSemanales = jugadores.map(j => {
