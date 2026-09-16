@@ -682,8 +682,8 @@ async function cargar() {
   const ciclo = setInterval(() => { i = (i+1) % frases.length; mensajeCarga.textContent = frases[i]; }, 1500);
 
   const { data: jugadores } = await sb.from('jugadores').select('*');
-  const { data: partidas } = await sb.from('partidas').select('*');
-  const { data: snapshots } = await sb.from('snapshots_elo').select('*').order('fecha', { ascending: true });
+  const { data: partidas } = await sb.from('partidas').select('*').range(0, 19999);
+  const { data: snapshots } = await sb.from('snapshots_elo').select('*').order('fecha', { ascending: true }).range(0, 19999);
   await obtenerUltimaVersion();
 
   let mapaCampeones = {};
