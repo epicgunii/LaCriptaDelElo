@@ -669,6 +669,24 @@ function iniciarCuentaAtras(momentoUltimaActualizacion) {
   intervalo = setInterval(tick, 1000);
 }
 
+// Trae TODAS las filas de una tabla, pase lo que pase con el límite de Max Rows de Supabase,
+// pidiendo en bloques de 1000 hasta que ya no queden más.
+async function traerTodo(nombreTabla, ordenarPor) {
+  let todas = [];
+  let desde = 0;
+  const TAMANO_BLOQUE = 1000;
+  while (true) {
+    let query = sb.from(nombreTabla).select('*').range(desde, desde + TAMANO_BLOQUE - 1);
+    if (ordenarPor) query = query.order(ordenarPor, { ascending: true });
+    const { data, error } = await query;
+    if (error || !data) break;
+    todas = todas.concat(data);
+    if (data.length < TAMANO_BLOQUE) break;
+    desde += TAMANO_BLOQUE;
+  }
+  return todas;
+}
+
 async function cargar() {
   const portal = document.getElementById('portal');
   const mensajeCarga = document.getElementById('mensajeCarga');
@@ -682,8 +700,8 @@ async function cargar() {
   const ciclo = setInterval(() => { i = (i+1) % frases.length; mensajeCarga.textContent = frases[i]; }, 1500);
 
   const { data: jugadores } = await sb.from('jugadores').select('*');
-  const { data: partidas } = await sb.from('partidas').select('*').range(0, 19999);
-  const { data: snapshots } = await sb.from('snapshots_elo').select('*').order('fecha', { ascending: true }).range(0, 19999);
+  const partidas = await traerTodo('partidas');
+  const snapshots = await traerTodo('snapshots_elo', 'fecha');
   await obtenerUltimaVersion();
 
   let mapaCampeones = {};
