@@ -470,6 +470,8 @@
   .fila-progreso .estado-sin-clasificar { font-style: italic; color: var(--text-dim); font-size: 0.82rem; }
 
   @media (max-width: 640px) {
+    .vineta { box-shadow: inset 0 0 90px 30px rgba(0,0,0,0.55); }
+
     body { padding: 24px 10px 60px; }
 
     header .eyebrow { font-size: 0.62rem; letter-spacing: 0.2em; }
@@ -533,13 +535,13 @@
   </header>
 
   <nav class="pestanas">
-    <button class="activa" data-tab="legado">Legado</button>
-    <button data-tab="olimpo">El Olimpo</button>
-    <button data-tab="cementerio">El Cementerio</button>
-    <button data-tab="infierno">El Infierno</button>
-    <button data-tab="hermandad">La Hermandad</button>
-    <button data-tab="guardian">El Guardián</button>
+    <button class="activa" data-tab="olimpo">El Olimpo</button>
     <button data-tab="cripta">La Cripta</button>
+    <button data-tab="infierno">El Infierno</button>
+    <button data-tab="guardian">El Guardián</button>
+    <button data-tab="cementerio">El Cementerio</button>
+    <button data-tab="hermandad">La Hermandad</button>
+    <button data-tab="legado">Legado</button>
   </nav>
 
   <div class="barra-estado">
@@ -554,18 +556,7 @@
     <p class="mensaje-carga" id="mensajeCarga">Descendiendo hacia los archivos de Riot…</p>
   </div>
 
-  <div id="vista-legado" class="vista-pestana">
-    <div class="controles">
-      <select id="ordenSelect">
-        <option value="elo-desc">Elo — de mayor a menor</option>
-        <option value="elo-asc">Elo — de menor a mayor</option>
-        <option value="nombre">Nombre (A-Z)</option>
-      </select>
-    </div>
-    <div id="contenido-legado"></div>
-  </div>
-
-  <div id="vista-olimpo" class="vista-pestana" style="display:none">
+  <div id="vista-olimpo" class="vista-pestana">
     <div class="desafios-cripta">
       <div class="desafios-cabecera">
         <div class="desafios-eyebrow">✦ La Luz de la Cripta ✦</div>
@@ -587,14 +578,19 @@
     <div id="tabla-cripta"></div>
   </div>
 
-  <div id="vista-cementerio" class="vista-pestana" style="display:none">
-    <p class="lema" style="margin-bottom: 20px">Ordenado por muertes de media cada partida, esta semana</p>
-    <div id="tabla-cementerio"></div>
-  </div>
-
   <div id="vista-infierno" class="vista-pestana" style="display:none">
     <p class="lema" style="margin-bottom: 20px">Ordenado por kills de media cada partida, esta semana</p>
     <div id="tabla-infierno"></div>
+  </div>
+
+  <div id="vista-guardian" class="vista-pestana" style="display:none">
+    <p class="lema" style="margin-bottom: 20px">Solo cuenta el sacrificio en el rol de Support, esta semana</p>
+    <div id="tabla-guardian"></div>
+  </div>
+
+  <div id="vista-cementerio" class="vista-pestana" style="display:none">
+    <p class="lema" style="margin-bottom: 20px">Ordenado por muertes de media cada partida, esta semana</p>
+    <div id="tabla-cementerio"></div>
   </div>
 
   <div id="vista-hermandad" class="vista-pestana" style="display:none">
@@ -602,9 +598,15 @@
     <div id="tabla-hermandad"></div>
   </div>
 
-  <div id="vista-guardian" class="vista-pestana" style="display:none">
-    <p class="lema" style="margin-bottom: 20px">Solo cuenta el sacrificio en el rol de Support, esta semana</p>
-    <div id="tabla-guardian"></div>
+  <div id="vista-legado" class="vista-pestana" style="display:none">
+    <div class="controles">
+      <select id="ordenSelect">
+        <option value="elo-desc">Elo — de mayor a menor</option>
+        <option value="elo-asc">Elo — de menor a mayor</option>
+        <option value="nombre">Nombre (A-Z)</option>
+      </select>
+    </div>
+    <div id="contenido-legado"></div>
   </div>
 
   <div id="vista-progreso" class="vista-pestana">
