@@ -60,8 +60,9 @@
   }
   .lema { margin-top: 14px; font-style: italic; color: var(--text-dim); font-size: 0.9rem; }
   .rombo-divisor {
-    width: 8px; height: 8px; background: var(--emerald); transform: rotate(45deg);
-    margin: 26px auto 0; box-shadow: 0 0 10px rgba(52,224,161,0.5);
+    width: 40px; height: 40px; color: var(--emerald);
+    margin: 26px auto 0;
+    filter: drop-shadow(0 0 10px rgba(52,224,161,0.6));
   }
 
   nav.pestanas {
@@ -469,6 +470,55 @@
   .fila-progreso .bonus-progreso { font-size: 0.7rem; color: #d4af37; margin-left: 8px; }
   .fila-progreso .estado-sin-clasificar { font-style: italic; color: var(--text-dim); font-size: 0.82rem; }
 
+  /* ---- Escudo de temporada (permanente en Legado) ---- */
+  .escudo {
+    width: 17px; height: 17px; display: inline-block; vertical-align: middle;
+    margin-left: 8px; fill: currentColor; position: relative; top: -1px;
+    animation: brillo-escudo 2.4s ease-in-out infinite;
+  }
+  @keyframes brillo-escudo {
+    0%, 100% { filter: drop-shadow(0 0 2px currentColor); opacity: 0.92; }
+    50%      { filter: drop-shadow(0 0 7px currentColor); opacity: 1; }
+  }
+  .escudo-oro    { color: #d4af37; }
+  .escudo-plata  { color: #b9c2c8; }
+  .escudo-bronce { color: #b0703a; }
+
+  .tarjeta-desafio .escudo { width: 30px; height: 30px; margin-left: 0; }
+
+  .rejilla-recompensas { grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 560px; margin: 0 auto; }
+  .rejilla-recompensas .tarjeta-desafio {
+    display: flex; align-items: center; gap: 10px; text-align: left;
+    padding: 10px 14px;
+  }
+  .rejilla-recompensas .tarjeta-desafio .escudo { width: 22px; height: 22px; flex-shrink: 0; }
+  .rejilla-recompensas .desafio-descripcion { font-size: 0.78rem; min-height: 0; margin: 0 0 2px; color: var(--text-dim); }
+  .rejilla-recompensas .desafio-puntos { font-size: 0.72rem; margin-top: 0; line-height: 1.3; }
+  .rejilla-recompensas .desafio-puntos small { margin-top: 0; }
+
+  @media (max-width: 640px) {
+    .rejilla-recompensas { grid-template-columns: 1fr; max-width: 320px; }
+  }
+
+  .anuncio-temporada-titulo {
+    font-family: 'Cinzel', serif; font-weight: 700; letter-spacing: 0.04em;
+    font-size: clamp(1.3rem, 4vw, 2rem); text-align: center; margin-top: 8px;
+    background: linear-gradient(90deg, #b9c2c8, #f2e6b8, #d4af37, #f2e6b8, #b9c2c8);
+    background-size: 200% auto;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: texto-dorado 5s linear infinite;
+    text-shadow: 0 0 30px rgba(212,175,55,0.25);
+  }
+  .anuncio-temporada-texto {
+    text-align: center; max-width: 620px; margin: 16px auto 18px;
+    font-style: italic; color: var(--text); font-size: 1rem; line-height: 1.6;
+  }
+  .anuncio-temporada-texto b { color: #f2e6b8; font-style: normal; }
+  .subseccion-recompensas {
+    text-align: center; font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--text-dim); margin-bottom: 14px;
+  }
+
   @media (max-width: 640px) {
     .vineta { box-shadow: inset 0 0 90px 30px rgba(0,0,0,0.55); }
 
@@ -525,13 +575,106 @@
 <div class="vineta"></div>
 <div class="grano"></div>
 
+<svg style="position:absolute; width:0; height:0; overflow:hidden" aria-hidden="true">
+  <symbol id="escudo-forma" viewBox="0 0 128 128">
+    <g transform="translate(0.000000,128.000000) scale(0.100000,-0.100000)"
+fill="currentColor" stroke="none">
+<path d="M327 1153 c-2 -5 -18 -33 -35 -63 -16 -30 -68 -121 -114 -201 -46
+-80 -97 -170 -113 -201 l-29 -56 28 -54 c16 -29 47 -84 69 -123 22 -38 57 -99
+77 -135 20 -36 56 -98 79 -138 l42 -72 311 2 311 3 49 85 c154 267 240 431
+234 447 -4 9 -70 128 -148 265 l-141 248 -308 0 c-169 0 -310 -3 -312 -7z
+m127 -19 c9 -3 16 -12 16 -20 0 -10 -13 -14 -45 -14 -41 0 -47 -3 -70 -41 -43
+-67 -64 -37 -30 44 15 36 17 37 64 37 27 0 56 -3 65 -6z m505 -44 c12 -28 19
+-55 16 -60 -12 -19 -30 -9 -50 28 -18 34 -24 37 -67 40 -32 2 -48 8 -48 17 0
+18 16 23 76 24 l52 1 21 -50z m-179 24 c0 -11 -27 -14 -140 -14 -110 0 -140 3
+-140 13 0 11 31 14 140 14 113 1 140 -2 140 -13z m-329 -80 c15 -25 15 -29 0
+-55 -13 -23 -23 -29 -52 -29 -25 0 -39 5 -43 16 -8 22 1 31 16 16 18 -18 46
+-15 57 6 11 21 -3 52 -24 52 -8 0 -15 5 -15 10 0 22 46 9 61 -16z m44 16 c3
+-5 15 -10 26 -10 10 0 19 -4 19 -10 0 -19 -55 -11 -68 10 -10 17 -10 20 2 20
+8 0 18 -4 21 -10z m179 -6 c11 -27 6 -82 -6 -87 -10 -4 -10 -7 0 -18 6 -7 12
+-28 12 -46 0 -27 4 -33 21 -33 28 0 51 -30 37 -47 -14 -17 -208 -18 -208 -1 0
+20 32 48 57 48 13 0 26 8 30 18 4 9 11 20 17 24 7 5 7 8 -1 8 -8 0 -13 15 -13
+40 0 22 5 40 11 40 6 0 1 13 -10 29 -28 38 -27 41 13 41 22 0 36 -6 40 -16z
+m132 0 c-3 -9 -6 -18 -6 -20 0 -2 -13 -4 -30 -4 -16 0 -30 5 -30 10 0 6 9 10
+19 10 11 0 23 5 26 10 10 16 28 11 21 -6z m84 6 c0 -5 -7 -10 -15 -10 -8 0
+-19 -8 -24 -18 -20 -37 27 -70 57 -40 15 15 24 6 16 -16 -4 -11 -18 -16 -44
+-16 -32 0 -39 4 -50 31 -17 39 2 79 37 79 13 0 23 -4 23 -10z m-580 -67 c0 -7
+-55 -106 -92 -165 -17 -27 -36 -48 -44 -48 -19 0 -19 -1 27 75 22 37 49 87 60
+111 13 32 22 42 34 38 8 -3 15 -8 15 -11z m224 -4 c-3 -5 -10 -9 -16 -9 -6 0
+-19 -7 -29 -16 -24 -22 -32 -1 -9 24 19 20 67 21 54 1z m490 -34 c13 -30 41
+-80 62 -110 20 -31 34 -58 31 -62 -15 -15 -40 14 -92 107 -45 81 -55 104 -44
+111 8 5 15 9 16 9 1 0 13 -25 27 -55z m-216 25 c15 -24 5 -25 -36 -4 -39 19
+-40 24 -4 24 16 0 32 -8 40 -20z m-478 -60 c-7 -16 -17 -30 -22 -30 -5 0 -8 3
+-6 8 22 44 32 61 36 57 3 -2 -1 -18 -8 -35z m634 3 c9 -18 13 -33 8 -33 -9 0
+-32 44 -32 62 0 15 4 10 24 -29z m-424 -18 c0 -17 -35 -55 -51 -55 -11 0 -19
+-4 -19 -10 0 -5 8 -10 17 -10 16 0 16 -1 1 -17 -9 -9 -25 -17 -35 -18 -40 -3
+-61 -35 -23 -35 32 0 23 -19 -12 -28 -20 -5 -34 -16 -36 -26 -3 -15 1 -18 22
+-12 33 8 26 -16 -10 -32 -13 -7 -24 -18 -24 -27 0 -18 21 -20 38 -3 18 18 16
+-13 -3 -38 -17 -22 -18 -34 -5 -54 8 -13 11 -12 23 4 23 31 39 11 23 -29 -15
+-34 -12 -45 10 -45 8 0 11 6 8 15 -5 11 -2 13 10 9 16 -6 32 -42 22 -51 -3 -4
+-1 -12 4 -18 8 -9 0 -12 -32 -13 -24 0 -52 2 -62 5 -18 5 -17 7 7 20 31 16 27
+33 -6 33 -25 0 -67 26 -67 41 0 5 11 9 25 9 32 0 23 25 -17 46 -29 15 -57 59
+-44 71 3 4 12 1 18 -5 7 -7 16 -12 20 -12 16 0 7 27 -17 50 -16 15 -25 34 -25
+53 l0 30 25 -23 c28 -26 42 -22 26 8 -13 25 -15 79 -2 86 4 3 13 -6 20 -20 9
+-21 14 -24 26 -14 11 9 12 16 2 31 -9 15 -8 23 9 46 27 35 44 40 44 12 0 -22
+0 -21 25 5 21 22 65 37 65 21z m265 -21 c24 -26 25 -26 25 -5 0 26 12 27 32 4
+22 -25 31 -60 18 -68 -8 -5 -7 -11 1 -21 10 -13 15 -11 29 11 9 14 20 22 23
+18 11 -10 8 -62 -4 -85 -16 -30 -2 -34 26 -8 l25 23 0 -32 c0 -21 -8 -40 -25
+-55 -14 -13 -25 -28 -25 -35 0 -14 6 -14 31 -1 15 9 19 7 19 -5 0 -15 -11 -27
+-74 -81 l-21 -19 34 -5 33 -5 -20 -19 c-12 -10 -36 -21 -53 -25 -38 -8 -52
+-31 -19 -31 13 0 20 -5 17 -12 -2 -8 -23 -13 -55 -13 -31 -1 -48 3 -44 9 3 6
+6 21 7 34 1 33 28 48 36 19 6 -21 7 -21 14 -3 5 11 3 26 -4 38 -7 11 -9 29 -5
+41 l7 21 19 -24 c16 -20 21 -21 29 -9 12 19 11 31 -6 53 -19 25 -21 56 -3 38
+17 -17 38 -15 38 3 0 8 -13 21 -30 30 -39 20 -39 36 1 28 29 -5 30 -4 20 14
+-5 11 -24 23 -41 26 -33 7 -41 27 -10 27 11 0 20 4 20 9 0 13 -26 32 -33 25
+-4 -4 -19 1 -34 11 -25 17 -26 19 -8 25 18 6 18 8 -5 20 -25 13 -49 39 -50 53
+0 17 43 5 65 -19z m-170 -202 c9 -155 12 -162 14 -29 1 120 4 127 42 107 18
+-10 19 -23 19 -216 l0 -206 -32 -44 c-17 -24 -34 -44 -38 -44 -3 0 -16 21 -29
+47 -20 42 -23 65 -28 258 -3 117 -3 220 0 228 4 10 13 13 25 10 18 -4 21 -17
+27 -111z m-472 62 c3 -3 -6 -24 -20 -47 l-25 -40 22 -44 c33 -67 12 -74 -39
+-13 l-42 50 36 50 c34 47 53 59 68 44z m67 0 c0 -12 -34 -64 -42 -64 -4 0 0
+16 9 35 15 30 33 47 33 29z m853 -31 l17 -38 -25 28 c-25 28 -32 47 -17 47 5
+0 16 -17 25 -37z m100 -13 l38 -51 -37 -44 c-20 -25 -43 -45 -50 -45 -18 0
+-18 2 7 53 l21 44 -25 40 c-14 23 -23 44 -20 47 14 14 31 3 66 -44z m-968 -70
+c15 -29 13 -50 -4 -50 -5 0 -11 14 -14 30 -4 18 -13 30 -22 30 -8 0 -15 5 -15
+10 0 23 40 8 55 -20z m905 20 c0 -5 -6 -10 -14 -10 -15 0 -26 -21 -26 -52 0
+-17 -3 -18 -15 -8 -19 16 -19 25 1 55 16 24 54 35 54 15z m-857 -66 c3 -4 0
+-13 -8 -21 -20 -19 -19 -29 5 -53 22 -22 25 -30 10 -30 -6 0 -19 14 -29 31
+-16 25 -17 36 -9 55 11 24 20 29 31 18z m785 -18 c8 -19 7 -30 -9 -55 -10 -17
+-23 -31 -29 -31 -15 0 -12 8 11 31 11 11 18 27 15 35 -3 8 -9 21 -12 29 -10
+25 12 17 24 -9z m-808 -146 c0 -5 4 -10 8 -10 14 0 54 -92 44 -102 -5 -5 -21
+18 -37 53 -15 34 -43 82 -62 107 -26 34 -32 47 -22 53 9 5 21 -7 41 -41 15
+-27 28 -54 28 -60z m880 93 c0 -3 -13 -22 -29 -42 -16 -20 -39 -58 -52 -84
+-13 -26 -26 -47 -31 -47 -4 0 -5 -6 -2 -14 7 -17 -12 -31 -21 -16 -10 17 106
+219 122 213 7 -3 13 -7 13 -10z m-791 -89 c7 -17 8 -31 1 -42 -8 -15 -9 -14
+-10 6 0 12 -9 31 -19 41 -11 11 -17 22 -14 24 10 10 30 -4 42 -29z m651 6
+c-11 -11 -20 -30 -20 -42 -1 -20 -2 -21 -11 -6 -15 26 20 86 43 72 4 -3 -2
+-14 -12 -24z m-57 -121 c-22 -36 -65 -39 -87 -7 -19 27 -10 40 10 14 31 -44
+83 -16 69 37 -6 21 -5 21 9 3 14 -17 14 -22 -1 -47z m-528 -15 c11 -2 27 6 37
+19 21 28 33 18 12 -11 -22 -32 -66 -29 -86 6 -8 15 -13 33 -10 41 3 9 9 2 16
+-19 7 -21 18 -34 31 -36z m135 18 c0 -4 -10 -12 -22 -17 -17 -8 -22 -18 -21
+-38 2 -24 0 -27 -13 -17 -18 16 -18 30 2 58 14 21 54 31 54 14z m256 0 c6 -4
+17 -18 23 -31 11 -20 10 -26 -4 -40 -17 -15 -17 -15 -11 3 9 25 -2 56 -20 56
+-8 0 -14 5 -14 10 0 12 11 13 26 2z m-434 -82 c21 -37 26 -40 66 -40 31 0 42
+-4 42 -16 0 -11 -6 -14 -20 -9 -10 3 -35 2 -55 -4 -28 -7 -35 -7 -35 5 0 8 -4
+14 -10 14 -5 0 -10 8 -10 18 0 9 -7 26 -15 36 -14 19 -12 36 5 36 5 0 20 -18
+32 -40z m623 31 c3 -5 -1 -16 -9 -24 -8 -8 -13 -17 -10 -20 3 -3 -1 -18 -10
+-34 -15 -31 -20 -31 -126 -15 -2 0 -6 5 -8 11 -2 7 15 11 45 11 46 0 49 2 71
+40 22 40 36 48 47 31z m-413 -23 c-7 -7 -12 -8 -12 -2 0 14 12 26 19 19 2 -3
+-1 -11 -7 -17z m162 6 c5 -14 4 -15 -9 -4 -17 14 -19 20 -6 20 5 0 12 -7 15
+-16z m46 -63 c0 -6 -56 -9 -130 -9 -71 0 -130 4 -130 9 0 5 59 9 130 9 73 0
+130 -4 130 -9z"/>
+</g>
+  </symbol>
+</svg>
+
 <main>
   <header>
     <div class="eyebrow">✦ Rift Watch ✦</div>
     <h1>La Cripta del Elo</h1>
     <p class="subtitulo">Sigue el ascenso… o la caída</p>
     <p class="lema">Los verdaderos invocadores nunca mueren &nbsp;◆&nbsp; Cada partida deja una huella en la cripta</p>
-    <div class="rombo-divisor"></div>
+    <svg class="rombo-divisor" viewBox="0 0 64 64"><use href="#escudo-forma"></use></svg>
   </header>
 
   <nav class="pestanas">
@@ -574,7 +717,38 @@
   </div>
 
   <div id="vista-cripta" class="vista-pestana" style="display:none">
-    <p class="lema" style="margin-bottom: 20px">Los puntos de cripta se ganan cumpliendo desafíos y no se pierden jamás</p>
+    <div class="desafios-cripta">
+      <div class="desafios-cabecera">
+        <div class="desafios-eyebrow">✦ Season I ✦</div>
+      </div>
+      <div class="anuncio-temporada-titulo">BIENVENIDOS A LA SEASON 1 DE LA CRIPTA DEL ELO</div>
+      <p class="anuncio-temporada-texto">Cada partida cuenta, cada desafío superado deja huella. Solo los <b>tres guerreros</b> que más puntos de cripta acumulen antes de que la temporada llegue a su fin se alzarán con <b>recompensas exclusivas</b> y un lugar en la historia de La Mazmorra que nadie más podrá arrebatarles. La gloria es efímera — pero el escudo que os ganéis quedará grabado para siempre.</p>
+      <p class="subseccion-recompensas">Recompensas del Top 3</p>
+      <div class="rejilla-desafios rejilla-recompensas">
+        <div class="tarjeta-desafio completado-alguien">
+          <svg class="escudo escudo-oro" viewBox="0 0 64 64"><use href="#escudo-forma"></use></svg>
+          <div>
+            <div class="desafio-descripcion">1º puesto</div>
+            <div class="desafio-puntos">Rol exclusivo en Discord<small>+ escudo dorado en Legado</small></div>
+          </div>
+        </div>
+        <div class="tarjeta-desafio completado-alguien">
+          <svg class="escudo escudo-plata" viewBox="0 0 64 64"><use href="#escudo-forma"></use></svg>
+          <div>
+            <div class="desafio-descripcion">2º puesto</div>
+            <div class="desafio-puntos">Rol exclusivo en Discord<small>+ escudo plateado en Legado</small></div>
+          </div>
+        </div>
+        <div class="tarjeta-desafio completado-alguien">
+          <svg class="escudo escudo-bronce" viewBox="0 0 64 64"><use href="#escudo-forma"></use></svg>
+          <div>
+            <div class="desafio-descripcion">3º puesto</div>
+            <div class="desafio-puntos">Rol exclusivo en Discord<small>+ escudo de bronce en Legado</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="lema" style="margin-bottom: 20px">Los puntos se ganan cumpliendo desafíos y se acumulan durante toda la temporada</p>
     <div id="tabla-cripta"></div>
   </div>
 
@@ -724,6 +898,13 @@ async function obtenerUltimaVersion() {
   } catch (e) { /* seguimos con el valor de respaldo */ }
 }
 
+function escudoHtml(mejorPuesto) {
+  if (mejorPuesto === 1) return `<svg class="escudo escudo-oro" viewBox="0 0 64 64" title="1º en una temporada de La Cripta"><use href="#escudo-forma"></use></svg>`;
+  if (mejorPuesto === 2) return `<svg class="escudo escudo-plata" viewBox="0 0 64 64" title="2º en una temporada de La Cripta"><use href="#escudo-forma"></use></svg>`;
+  if (mejorPuesto === 3) return `<svg class="escudo escudo-bronce" viewBox="0 0 64 64" title="3º en una temporada de La Cripta"><use href="#escudo-forma"></use></svg>`;
+  return '';
+}
+
 function filaHtml(f, puesto, opciones = {}) {
   const claseTop = puesto === 1 ? 'puesto-1' : puesto === 2 ? 'puesto-2' : puesto === 3 ? 'puesto-3' : '';
   const claseRacha = opciones.enRacha ? 'en-racha' : opciones.enMaldicion ? 'en-maldicion' : '';
@@ -737,7 +918,7 @@ function filaHtml(f, puesto, opciones = {}) {
         <span class="puesto">${puesto}</span>
         ${f.iconoUrl ? `<img class="avatar" src="${f.iconoUrl}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'avatar-vacio',textContent:'?'}))">` : `<div class="avatar-vacio">?</div>`}
         <div class="info-jugador">
-          <span class="nombre-jugador">${f.alias}</span>${opciones.enRacha ? `<span class="etiqueta-racha">Racha x${opciones.largoRacha}</span>` : ''}${opciones.enMaldicion ? `<span class="etiqueta-maldicion">Maldición x${opciones.largoRacha}</span>` : ''}
+          <span class="nombre-jugador">${f.alias}</span>${opciones.escudoHtml || ''}${opciones.enRacha ? `<span class="etiqueta-racha">Racha x${opciones.largoRacha}</span>` : ''}${opciones.enMaldicion ? `<span class="etiqueta-maldicion">Maldición x${opciones.largoRacha}</span>` : ''}
           <div class="champ-rol">${opciones.lineaSecundaria || ''}</div>
         </div>
         <div class="tres-lp">
@@ -784,7 +965,7 @@ function filaHtml(f, puesto, opciones = {}) {
       <span class="puesto">${puesto}</span>
       ${f.iconoUrl ? `<img class="avatar" src="${f.iconoUrl}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'avatar-vacio',textContent:'?'}))">` : `<div class="avatar-vacio">?</div>`}
       <div class="info-jugador">
-        <span class="nombre-jugador">${f.alias}</span>${opciones.enRacha ? `<span class="etiqueta-racha">Racha x${opciones.largoRacha}</span>` : ''}${opciones.enMaldicion ? `<span class="etiqueta-maldicion">Maldición x${opciones.largoRacha}</span>` : ''}
+        <span class="nombre-jugador">${f.alias}</span>${opciones.escudoHtml || ''}${opciones.enRacha ? `<span class="etiqueta-racha">Racha x${opciones.largoRacha}</span>` : ''}${opciones.enMaldicion ? `<span class="etiqueta-maldicion">Maldición x${opciones.largoRacha}</span>` : ''}
         <div class="champ-rol">${opciones.lineaSecundaria || ''}</div>
       </div>
       <div class="fila-datos">
@@ -798,7 +979,8 @@ function pintarFilasLegado(filas) {
   const contenido = document.getElementById('contenido-legado');
   contenido.innerHTML = `<div class="lista-jugadores">${
     filas.map((f, i) => filaHtml(f, i + 1, {
-      lineaSecundaria: `${f.campeonFavorito || 'Sin registros'} ${f.rolReciente ? '· ' + f.rolReciente + ' (reciente)' : ''}`
+      lineaSecundaria: `${f.campeonFavorito || 'Sin registros'} ${f.rolReciente ? '· ' + f.rolReciente + ' (reciente)' : ''}`,
+      escudoHtml: escudoHtml(f.mejorPuestoCripta),
     })).join('')
   }</div>`;
 }
@@ -999,6 +1181,7 @@ async function cargar() {
   const { data: jugadores } = await sb.from('jugadores').select('*');
   const partidas = await traerTodo('partidas');
   const snapshots = await traerTodo('snapshots_elo', 'fecha');
+  const { data: temporadasHistorico } = await sb.from('temporadas_cripta_historico').select('jugador_id, puesto');
   await obtenerUltimaVersion();
 
   let mapaCampeones = {};
@@ -1027,6 +1210,14 @@ async function cargar() {
 
   const hace7dias = inicioDeSemanaLocal();
 
+  // Mejor puesto (1º/2º/3º) conseguido alguna vez en una temporada de La Cripta, por jugador
+  const mejorPuestoCriptaMap = {};
+  (temporadasHistorico || []).forEach(t => {
+    if (!mejorPuestoCriptaMap[t.jugador_id] || t.puesto < mejorPuestoCriptaMap[t.jugador_id]) {
+      mejorPuestoCriptaMap[t.jugador_id] = t.puesto;
+    }
+  });
+
   // ---------- LEGADO (all-time, sin nada semanal) ----------
   filasGlobal = jugadores.map(j => {
     const susPartidas = (partidas || []).filter(p => p.jugador_id === j.id);
@@ -1045,6 +1236,7 @@ async function cargar() {
       rolReciente: rolCrudo ? (NOMBRE_ROL[rolCrudo] || rolCrudo) : null,
       victorias: j.wins ?? susPartidas.filter(p => p.resultado === 'victoria').length,
       derrotas: j.losses ?? susPartidas.filter(p => p.resultado === 'derrota').length,
+      mejorPuestoCripta: mejorPuestoCriptaMap[j.id] || null,
     };
   });
   ordenar('elo-desc');
