@@ -670,7 +670,7 @@ c-11 -11 -20 -30 -20 -42 -1 -20 -2 -21 -11 -6 -15 26 20 86 43 72 4 -3 -2
 
 <main>
   <header>
-    <div class="eyebrow">✦ Rift Watch ✦</div>
+    <div class="eyebrow">✦ La Mazmorra ✦</div>
     <h1>La Cripta del Elo</h1>
     <p class="subtitulo">Sigue el ascenso… o la caída</p>
     <p class="lema">Los verdaderos invocadores nunca mueren &nbsp;◆&nbsp; Cada partida deja una huella en la cripta</p>
@@ -678,13 +678,13 @@ c-11 -11 -20 -30 -20 -42 -1 -20 -2 -21 -11 -6 -15 26 20 86 43 72 4 -3 -2
   </header>
 
   <nav class="pestanas">
-    <button class="activa" data-tab="olimpo">El Olimpo</button>
+    <button class="activa" data-tab="legado">Legado</button>
+    <button data-tab="olimpo">El Olimpo</button>
     <button data-tab="cripta">La Cripta</button>
     <button data-tab="infierno">El Infierno</button>
     <button data-tab="guardian">El Guardián</button>
     <button data-tab="cementerio">El Cementerio</button>
     <button data-tab="hermandad">La Hermandad</button>
-    <button data-tab="legado">Legado</button>
   </nav>
 
   <div class="barra-estado">
@@ -699,19 +699,7 @@ c-11 -11 -20 -30 -20 -42 -1 -20 -2 -21 -11 -6 -15 26 20 86 43 72 4 -3 -2
     <p class="mensaje-carga" id="mensajeCarga">Descendiendo hacia los archivos de Riot…</p>
   </div>
 
-  <div id="vista-olimpo" class="vista-pestana">
-    <div class="desafios-cripta">
-      <div class="desafios-cabecera">
-        <div class="desafios-eyebrow">✦ La Luz de la Cripta ✦</div>
-        <div class="desafios-titulo">Desafíos de la Semana</div>
-      </div>
-      <div class="rejilla-desafios" id="rejilla-desafios">
-        <p class="estado-vacio">Cargando los desafíos…</p>
-      </div>
-      <div class="boton-participa-wrap">
-        <button class="boton-participa" onclick="mostrarProgreso()">Participa</button>
-      </div>
-    </div>
+  <div id="vista-olimpo" class="vista-pestana" style="display:none">
     <p class="lema" style="margin-bottom: 20px">Solo cuentan quienes han combatido esta semana</p>
     <div id="tabla-olimpo"></div>
   </div>
@@ -772,7 +760,19 @@ c-11 -11 -20 -30 -20 -42 -1 -20 -2 -21 -11 -6 -15 26 20 86 43 72 4 -3 -2
     <div id="tabla-hermandad"></div>
   </div>
 
-  <div id="vista-legado" class="vista-pestana" style="display:none">
+  <div id="vista-legado" class="vista-pestana">
+    <div class="desafios-cripta">
+      <div class="desafios-cabecera">
+        <div class="desafios-eyebrow">✦ La Luz de la Cripta ✦</div>
+        <div class="desafios-titulo">Desafíos de la Semana</div>
+      </div>
+      <div class="rejilla-desafios" id="rejilla-desafios">
+        <p class="estado-vacio">Cargando los desafíos…</p>
+      </div>
+      <div class="boton-participa-wrap">
+        <button class="boton-participa" onclick="mostrarProgreso()">Ver progreso</button>
+      </div>
+    </div>
     <div class="controles">
       <select id="ordenSelect">
         <option value="elo-desc">Elo — de mayor a menor</option>
@@ -786,7 +786,7 @@ c-11 -11 -20 -30 -20 -42 -1 -20 -2 -21 -11 -6 -15 26 20 86 43 72 4 -3 -2
   <div id="vista-progreso" class="vista-pestana">
     <div class="progreso-cabecera">
       <p class="lema" style="margin: 0">El progreso de todos en los desafíos de esta semana</p>
-      <button class="boton-volver" onclick="ocultarProgreso()">← Volver a El Olimpo</button>
+      <button class="boton-volver" onclick="ocultarProgreso()">← Volver</button>
     </div>
     <div id="contenido-progreso"></div>
   </div>
@@ -1086,9 +1086,9 @@ function mostrarProgreso() {
 
 function ocultarProgreso() {
   document.querySelectorAll('nav.pestanas button').forEach(b => b.classList.remove('activa'));
-  document.querySelector('nav.pestanas button[data-tab="olimpo"]').classList.add('activa');
+  document.querySelector('nav.pestanas button[data-tab="legado"]').classList.add('activa');
   document.querySelectorAll('.vista-pestana').forEach(v => v.style.display = 'none');
-  document.getElementById('vista-olimpo').style.display = '';
+  document.getElementById('vista-legado').style.display = '';
 }
 
 function pintarCripta(jugadoresRaw) {
