@@ -678,6 +678,17 @@ function valorEloOrdenable(f) {
   return base + div + (f.lp || 0);
 }
 
+// Igual que valorEloOrdenable pero pensado para snapshots (mismos campos tier/division/lp).
+// Necesario para diferencias de LP: un cambio de división o de tier no es comparable
+// restando el campo "lp" en bruto (ej: bajar de Gold I a Gold II con más LP numérico
+// no es una subida real, es una bajada de división).
+function valorEloSnapshot(s) {
+  if (!s.tier) return null;
+  const base = RANGOS_ORDEN.indexOf(s.tier) * 1000;
+  const div = s.division ? (DIVISION_VALOR[s.division] || 0) * 100 : 0;
+  return base + div + (s.lp || 0);
+}
+
 function inicioDeSemanaLocal() {
   const ahora = new Date();
   const diaSemana = ahora.getDay();
@@ -1063,13 +1074,16 @@ async function cargar() {
       if (new Date(ultimo.fecha).getTime() - new Date(primero.fecha).getTime() >= UNA_HORA_MS) {
         let sumaGanados = 0, sumaPerdidos = 0;
         for (let k = 1; k < recientesSnaps.length; k++) {
-          const diferencia = recientesSnaps[k].lp - recientesSnaps[k-1].lp;
+          const valorAnterior = valorEloSnapshot(recientesSnaps[k-1]);
+          const valorActual = valorEloSnapshot(recientesSnaps[k]);
+          if (valorAnterior === null || valorActual === null) continue;
+          const diferencia = valorActual - valorAnterior;
           if (diferencia > 0) sumaGanados += diferencia;
           else if (diferencia < 0) sumaPerdidos += Math.abs(diferencia);
         }
         lpGanados = sumaGanados;
         lpPerdidos = sumaPerdidos;
-        cambioLp = ultimo.lp - primero.lp;
+        cambioLp = valorEloSnapshot(ultimo) - valorEloSnapshot(primero);
       }
     }
     if (cambioLp === null && jugoEstaSemana) {
